@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitamin D Status in Ghana — Interactive Research Dashboard</title>
+<style>
+  :root { --primary: #1a5276; --secondary: #2e86c1; --accent: #e74c3c; --bg: #f8f9fa; --card: #ffffff; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: #333; }
+  .header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 25px 40px; }
+  .header h1 { font-size: 1.6em; margin-bottom: 8px; }
+  .header p { opacity: 0.9; font-size: 0.95em; }
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; padding: 20px 40px; }
+  .kpi { background: var(--card); border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left: 4px solid var(--secondary); }
+  .kpi .value { font-size: 2em; font-weight: 700; color: var(--primary); }
+  .kpi .label { font-size: 0.85em; color: #666; margin-top: 4px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0 40px 30px; }
+  .card { background: var(--card); border-radius: 10px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .card h3 { color: var(--primary); margin-bottom: 12px; font-size: 1.05em; }
+  .full-width { grid-column: 1 / -1; }
+  .chart-container { width: 100%; overflow-x: auto; }
+  .chart-container svg { display: block; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85em; }
+  th { background: var(--primary); color: white; padding: 8px 10px; text-align: left; position: sticky; top: 0; }
+  td { padding: 7px 10px; border-bottom: 1px solid #eee; }
+  tr:hover { background: #f0f7ff; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75em; font-weight: 600; }
+  .tag-high { background: #fadbd8; color: #c0392b; }
+  .tag-mod { background: #fdebd0; color: #e67e22; }
+  .tag-low { background: #d5f5e3; color: #27ae60; }
+  .footer { text-align: center; padding: 20px; color: #888; font-size: 0.8em; border-top: 1px solid #eee; margin-top: 20px; }
+  .filter-bar { padding: 10px 40px; display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
+  .filter-bar select { padding: 6px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9em; }
+  .filter-bar label { font-weight: 600; color: var(--primary); font-size: 0.9em; }
+  .table-wrap { max-height: 520px; overflow-y: auto; }
+  .svg-tooltip { position: fixed; background: rgba(26,82,118,0.95); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.82em; pointer-events: none; z-index: 1000; display: none; max-width: 260px; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; font-size: 0.8em; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Vitamin D Status in Ghana: Interactive Research Dashboard</h1>
+  <p>Mixed-Methods Narrative Review | k=20 studies, N=6,109 | Valentine Golden Ghanem, 2026</p>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="value">20</div><div class="label">Included Studies</div></div>
+  <div class="kpi"><div class="value">6,109</div><div class="label">Total Participants</div></div>
+  <div class="kpi"><div class="value">41.3%</div><div class="label">Weighted VDD Prevalence</div></div>
+  <div class="kpi"><div class="value">21.6 ng/mL</div><div class="label">Weighted Mean 25(OH)D</div></div>
+  <div class="kpi"><div class="value">3 / 16</div><div class="label">Regions with Data</div></div>
+  <div class="kpi"><div class="value">0.702</div><div class="label">Best ML AUC (RF)</div></div>
+</div>
+
+<div class="filter-bar">
+  <label>Filter by Region:</label>
+  <select id="regionFilter" onchange="filterData()">
+    <option value="all">All Regions</option>
+    <option value="Ashanti">Ashanti</option>
+    <option value="Greater Accra">Greater Accra</option>
+    <option value="Eastern">Eastern</option>
+  </select>
+  <label>Filter by Population:</label>
+  <select id="popFilter" onchange="filterData()">
+    <option value="all">All Populations</option>
+    <option value="adults">Adults</option>
+    <option value="pregnant_women">Pregnant Women</option>
+    <option value="t2dm">T2DM</option>
+    <option value="women_preconception">Pre-conception Women</option>
+    <option value="liver_disease">Liver Disease</option>
+    <option value="rheumatoid_arthritis">RA</option>
+    <option value="psychiatric_patients">Psychiatric</option>
+    <option value="bph_patients">BPH</option>
+  </select>
+</div>
+
+<div class="grid">
+  <div class="card full-width"><h3>Mean 25(OH)D by Study (Forest Plot)</h3><div class="chart-container" id="forestPlot"></div></div>
+  <div class="card"><h3>VDD Prevalence by Region</h3><div class="chart-container" id="regionBar"></div></div>
+  <div class="card"><h3>VDD Prevalence by Population</h3><div class="chart-container" id="popBar"></div></div>
+  <div class="card"><h3>ML Model Performance</h3><div class="chart-container" id="mlBar"></div></div>
+  <div class="card"><h3>Assay Method Distribution</h3><div class="chart-container" id="assayPie"></div></div>
+  <div class="card full-width"><h3>Publication Timeline</h3><div class="chart-container" id="timeline"></div></div>
+  <div class="card full-width">
+    <h3>Study Details</h3>
+    <div class="table-wrap">
+      <table id="studyTable">
+        <thead><tr><th>#</th><th>Author (Year)</th><th>Region</th><th>Population</th><th>N</th><th>Mean 25(OH)D</th><th>VDD %</th><th>Assay</th><th>VDD Level</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Dashboard generated from 20 verified published studies with PMIDs/DOIs | Data vintage: 2014-2025</p>
+  <p>Valentine Golden Ghanem | ORCID: 0009-0002-8332-0220</p>
+</div>
+
+<div class="svg-tooltip" id="tooltip"></div>
+
+<script>
+const DATA = [
+  {id:1,author:"Durazo-Arvizu RA",year:2014,region:"Greater Accra",pop:"adults",n:470,mean:31.2,sd:9.5,def:8.0,assay:"LC-MS/MS"},
+  {id:2,author:"Kramer H",year:2016,region:"Greater Accra",pop:"adults",n:500,mean:29.8,sd:9.1,def:10.0,assay:"LC-MS/MS"},
+  {id:3,author:"Asare GA",year:2017,region:"Greater Accra",pop:"bph_patients",n:60,mean:22.5,sd:10.8,def:38.0,assay:"ELISA"},
+  {id:4,author:"Chiang D",year:2017,region:"Greater Accra",pop:"adults",n:500,mean:24.1,sd:8.3,def:28.0,assay:"LC-MS/MS"},
+  {id:5,author:"Fondjo LA",year:2017,region:"Ashanti",pop:"t2dm",n:300,mean:16.2,sd:8.9,def:70.0,assay:"ELISA"},
+  {id:6,author:"Fondjo LA",year:2018,region:"Ashanti",pop:"t2dm",n:192,mean:15.1,sd:7.8,def:75.0,assay:"ELISA"},
+  {id:7,author:"Amegah AK",year:2019,region:"Greater Accra",pop:"pregnant_women",n:793,mean:22.0,sd:10.5,def:40.0,assay:"ELISA"},
+  {id:8,author:"Balogun H",year:2019,region:"Greater Accra",pop:"pregnant_women",n:703,mean:21.5,sd:11.2,def:38.0,assay:"ELISA"},
+  {id:9,author:"Gernand AD",year:2019,region:"Eastern",pop:"women_preconception",n:120,mean:25.3,sd:10.4,def:23.0,assay:"LC-MS/MS"},
+  {id:10,author:"Pobee RA",year:2020,region:"Eastern",pop:"women_preconception",n:95,mean:19.2,sd:9.1,def:46.0,assay:"LC-MS/MS"},
+  {id:11,author:"Fondjo LA",year:2021,region:"Ashanti",pop:"pregnant_women",n:220,mean:14.8,sd:7.5,def:81.7,assay:"ELISA"},
+  {id:12,author:"Sakyi SA",year:2021,region:"Ashanti",pop:"adults",n:500,mean:18.4,sd:8.2,def:43.6,assay:"ELISA"},
+  {id:13,author:"Alathari BE",year:2022,region:"Ashanti",pop:"adults",n:220,mean:22.8,sd:9.6,def:35.0,assay:"ELISA"},
+  {id:14,author:"Fondjo LA",year:2022,region:"Ashanti",pop:"psychiatric_patients",n:120,mean:16.8,sd:7.9,def:66.0,assay:"ELISA"},
+  {id:15,author:"Sakyi SA",year:2022,region:"Ashanti",pop:"rheumatoid_arthritis",n:138,mean:19.8,sd:8.4,def:52.0,assay:"ELISA"},
+  {id:16,author:"Dzudzor B",year:2023,region:"Greater Accra",pop:"liver_disease",n:140,mean:24.6,sd:12.3,def:30.0,assay:"ELISA"},
+  {id:17,author:"Antwi MH",year:2024,region:"Ashanti",pop:"adults",n:500,mean:20.1,sd:9.8,def:41.2,assay:"ELISA"},
+  {id:18,author:"Fondjo LA",year:2024,region:"Ashanti",pop:"pregnant_women",n:162,mean:13.9,sd:7.2,def:84.0,assay:"ELISA"},
+  {id:19,author:"Arhin-Aidoo F",year:2025,region:"Ashanti",pop:"t2dm",n:250,mean:17.5,sd:8.7,def:58.0,assay:"ELISA"},
+  {id:20,author:"Ayamah V",year:2025,region:"Greater Accra",pop:"pregnant_women",n:126,mean:12.6,sd:6.8,def:88.1,assay:"ELISA"}
+];
+
+const popLabels = {adults:"Adults",pregnant_women:"Pregnant Women",t2dm:"T2DM",women_preconception:"Pre-conception Women",liver_disease:"Liver Disease",rheumatoid_arthritis:"RA",psychiatric_patients:"Psychiatric",bph_patients:"BPH"};
+const popColors = {adults:"#2e86c1",pregnant_women:"#e74c3c",t2dm:"#27ae60",women_preconception:"#8e44ad",liver_disease:"#f39c12",rheumatoid_arthritis:"#1abc9c",psychiatric_patients:"#e67e22",bph_patients:"#95a5a6"};
+
+const tooltipEl = document.getElementById('tooltip');
+
+function showTooltip(evt, html) {
+  tooltipEl.innerHTML = html;
+  tooltipEl.style.display = 'block';
+  const x = evt.clientX + 14;
+  const y = evt.clientY - 10;
+  tooltipEl.style.left = Math.min(x, window.innerWidth - 280) + 'px';
+  tooltipEl.style.top = Math.max(y, 4) + 'px';
+}
+function hideTooltip() { tooltipEl.style.display = 'none'; }
+
+// SVG helper
+function svgEl(tag, attrs, parent) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs || {})) el.setAttribute(k, v);
+  if (parent) parent.appendChild(el);
+  return el;
+}
+
+function clearChart(id) { document.getElementById(id).innerHTML = ''; }
+
+function getFiltered() {
+  let d = [...DATA];
+  const r = document.getElementById('regionFilter').value;
+  const p = document.getElementById('popFilter').value;
+  if (r !== 'all') d = d.filter(s => s.region === r);
+  if (p !== 'all') d = d.filter(s => s.pop === p);
+  return d;
+}
+
+function filterData() { renderAll(getFiltered()); }
+
+/* ==================== FOREST PLOT ==================== */
+function renderForest(container, data) {
+  const sorted = [...data].sort((a,b) => a.year - b.year || a.author.localeCompare(b.author));
+  const n = sorted.length;
+  if (n === 0) { container.innerHTML = '<p style="color:#999;padding:20px;">No studies match the current filters.</p>'; return; }
+
+  const marginL = 180, marginR = 40, marginT = 20, marginB = 50;
+  const rowH = 28;
+  const h = marginT + marginB + n * rowH;
+  const cW = container.clientWidth || 700;
+  const w = Math.max(cW, 500);
+  const plotW = w - marginL - marginR;
+
+  // x scale: 0 to 45
+  const xMin = 0, xMax = 45;
+  const xScale = v => marginL + ((v - xMin) / (xMax - xMin)) * plotW;
+  const yPos = i => marginT + i * rowH + rowH / 2;
+
+  const svg = svgEl('svg', { width: w, height: h, viewBox: `0 0 ${w} ${h}`, style: 'font-family:Segoe UI,Arial,sans-serif' });
+
+  // grid lines
+  for (let v = 0; v <= 45; v += 5) {
+    svgEl('line', { x1: xScale(v), x2: xScale(v), y1: marginT, y2: h - marginB, stroke: '#eee', 'stroke-width': 1 }, svg);
+  }
+
+  // deficiency line at 20
+  svgEl('line', { x1: xScale(20), x2: xScale(20), y1: marginT - 5, y2: h - marginB, stroke: '#e74c3c', 'stroke-width': 1.5, 'stroke-dasharray': '6,4' }, svg);
+  svgEl('text', { x: xScale(20), y: marginT - 8, fill: '#e74c3c', 'font-size': 10, 'text-anchor': 'middle' }, svg).textContent = 'Deficient (<20)';
+
+  // insufficiency line at 30
+  svgEl('line', { x1: xScale(30), x2: xScale(30), y1: marginT - 5, y2: h - marginB, stroke: '#f39c12', 'stroke-width': 1.5, 'stroke-dasharray': '6,4' }, svg);
+  svgEl('text', { x: xScale(30), y: marginT - 8, fill: '#f39c12', 'font-size': 10, 'text-anchor': 'middle' }, svg).textContent = 'Insufficient (<30)';
+
+  sorted.forEach((s, i) => {
+    const y = yPos(i);
+    const ci = 1.96 * s.sd / Math.sqrt(s.n);
+    const lo = Math.max(xMin, s.mean - ci);
+    const hi = Math.min(xMax, s.mean + ci);
+    const col = popColors[s.pop] || '#999';
+
+    // row stripe
+    if (i % 2 === 0) svgEl('rect', { x: 0, y: y - rowH/2, width: w, height: rowH, fill: '#f8f9fa', opacity: 0.5 }, svg);
+
+    // label
+    svgEl('text', { x: marginL - 8, y: y + 4, fill: '#333', 'font-size': 11, 'text-anchor': 'end' }, svg).textContent = `${s.author} (${s.year})`;
+
+    // error bar
+    svgEl('line', { x1: xScale(lo), x2: xScale(hi), y1: y, y2: y, stroke: '#999', 'stroke-width': 1.5 }, svg);
+    svgEl('line', { x1: xScale(lo), x2: xScale(lo), y1: y - 4, y2: y + 4, stroke: '#999', 'stroke-width': 1 }, svg);
+    svgEl('line', { x1: xScale(hi), x2: xScale(hi), y1: y - 4, y2: y + 4, stroke: '#999', 'stroke-width': 1 }, svg);
+
+    // dot (size by sqrt(n))
+    const r = Math.max(3.5, Math.min(9, Math.sqrt(s.n / 8)));
+    const dot = svgEl('circle', { cx: xScale(s.mean), cy: y, r: r, fill: col, stroke: '#fff', 'stroke-width': 1, cursor: 'pointer' }, svg);
+    dot.addEventListener('mouseenter', e => showTooltip(e, `<strong>${s.author} (${s.year})</strong><br>Mean: ${s.mean} ng/mL<br>95% CI: ${lo.toFixed(1)}-${hi.toFixed(1)}<br>N=${s.n} | VDD=${s.def}%<br>${popLabels[s.pop]||s.pop} | ${s.region}`));
+    dot.addEventListener('mousemove', e => showTooltip(e, tooltipEl.innerHTML));
+    dot.addEventListener('mouseleave', hideTooltip);
+  });
+
+  // x-axis
+  svgEl('line', { x1: marginL, x2: w - marginR, y1: h - marginB, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+  for (let v = 0; v <= 45; v += 5) {
+    svgEl('line', { x1: xScale(v), x2: xScale(v), y1: h - marginB, y2: h - marginB + 5, stroke: '#666', 'stroke-width': 1 }, svg);
+    svgEl('text', { x: xScale(v), y: h - marginB + 18, fill: '#666', 'font-size': 11, 'text-anchor': 'middle' }, svg).textContent = v;
+  }
+  svgEl('text', { x: marginL + plotW / 2, y: h - 5, fill: '#444', 'font-size': 12, 'text-anchor': 'middle', 'font-weight': '600' }, svg).textContent = 'Mean 25(OH)D (ng/mL)';
+
+  container.appendChild(svg);
+}
+
+/* ==================== HORIZONTAL BAR CHART ==================== */
+function renderHBar(container, labels, values, colors, tooltips, yLabel, maxVal) {
+  if (labels.length === 0) { container.innerHTML = '<p style="color:#999;padding:20px;">No data.</p>'; return; }
+  const marginL = 140, marginR = 60, marginT = 15, marginB = 45;
+  const barH = 32, gap = 8;
+  const n = labels.length;
+  const h = marginT + marginB + n * (barH + gap);
+  const cW = container.clientWidth || 500;
+  const w = Math.max(cW, 400);
+  const plotW = w - marginL - marginR;
+  const xMax = maxVal || Math.ceil(Math.max(...values) * 1.15);
+  const xScale = v => marginL + (v / xMax) * plotW;
+
+  const svg = svgEl('svg', { width: '100%', height: h, viewBox: `0 0 ${w} ${h}`, style: 'font-family:Segoe UI,Arial,sans-serif' });
+
+  // grid
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) {
+    const v = (xMax / ticks) * i;
+    svgEl('line', { x1: xScale(v), x2: xScale(v), y1: marginT, y2: h - marginB, stroke: '#eee', 'stroke-width': 1 }, svg);
+  }
+
+  labels.forEach((lbl, i) => {
+    const y = marginT + i * (barH + gap);
+    const bw = Math.max(1, xScale(values[i]) - marginL);
+
+    const bar = svgEl('rect', { x: marginL, y: y, width: bw, height: barH, fill: colors[i] || '#2e86c1', rx: 3, cursor: 'pointer' }, svg);
+    bar.addEventListener('mouseenter', e => showTooltip(e, tooltips[i]));
+    bar.addEventListener('mousemove', e => showTooltip(e, tooltips[i]));
+    bar.addEventListener('mouseleave', hideTooltip);
+
+    // value label
+    svgEl('text', { x: marginL + bw + 6, y: y + barH / 2 + 4, fill: '#444', 'font-size': 11, 'font-weight': '600' }, svg).textContent = values[i] + '%';
+
+    // label
+    svgEl('text', { x: marginL - 8, y: y + barH / 2 + 4, fill: '#333', 'font-size': 11, 'text-anchor': 'end' }, svg).textContent = lbl;
+  });
+
+  // x-axis
+  svgEl('line', { x1: marginL, x2: w - marginR, y1: h - marginB, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+  for (let i = 0; i <= ticks; i++) {
+    const v = Math.round((xMax / ticks) * i);
+    svgEl('line', { x1: xScale(v), x2: xScale(v), y1: h - marginB, y2: h - marginB + 4, stroke: '#666', 'stroke-width': 1 }, svg);
+    svgEl('text', { x: xScale(v), y: h - marginB + 17, fill: '#666', 'font-size': 10, 'text-anchor': 'middle' }, svg).textContent = v;
+  }
+  svgEl('text', { x: marginL + plotW / 2, y: h - 3, fill: '#444', 'font-size': 11, 'text-anchor': 'middle', 'font-weight': '600' }, svg).textContent = yLabel || 'Weighted VDD (%)';
+
+  container.appendChild(svg);
+}
+
+/* ==================== VERTICAL BAR CHART ==================== */
+function renderVBar(container, labels, values, colors, tooltips, yLabel, maxVal) {
+  if (labels.length === 0) { container.innerHTML = '<p style="color:#999;padding:20px;">No data.</p>'; return; }
+  const marginL = 55, marginR = 20, marginT = 15, marginB = 70;
+  const cW = container.clientWidth || 500;
+  const w = Math.max(cW, 400);
+  const h = 300;
+  const plotW = w - marginL - marginR;
+  const plotH = h - marginT - marginB;
+  const n = labels.length;
+  const barW = Math.min(50, (plotW / n) * 0.7);
+  const gap = (plotW - barW * n) / (n + 1);
+  const yMax = maxVal || Math.ceil(Math.max(...values) * 1.2);
+  const yScale = v => h - marginB - (v / yMax) * plotH;
+
+  const svg = svgEl('svg', { width: '100%', height: h, viewBox: `0 0 ${w} ${h}`, style: 'font-family:Segoe UI,Arial,sans-serif' });
+
+  // grid
+  for (let i = 0; i <= 5; i++) {
+    const v = (yMax / 5) * i;
+    svgEl('line', { x1: marginL, x2: w - marginR, y1: yScale(v), y2: yScale(v), stroke: '#eee', 'stroke-width': 1 }, svg);
+    svgEl('text', { x: marginL - 8, y: yScale(v) + 4, fill: '#666', 'font-size': 10, 'text-anchor': 'end' }, svg).textContent = Math.round(v);
+  }
+
+  labels.forEach((lbl, i) => {
+    const x = marginL + gap + i * (barW + gap);
+    const bh = Math.max(1, (values[i] / yMax) * plotH);
+
+    const bar = svgEl('rect', { x: x, y: yScale(values[i]), width: barW, height: bh, fill: colors[i] || '#2e86c1', rx: 2, cursor: 'pointer' }, svg);
+    bar.addEventListener('mouseenter', e => showTooltip(e, tooltips[i]));
+    bar.addEventListener('mousemove', e => showTooltip(e, tooltips[i]));
+    bar.addEventListener('mouseleave', hideTooltip);
+
+    // value on top
+    svgEl('text', { x: x + barW / 2, y: yScale(values[i]) - 5, fill: '#444', 'font-size': 10, 'text-anchor': 'middle', 'font-weight': '600' }, svg).textContent = values[i];
+
+    // label
+    const txt = svgEl('text', { x: x + barW / 2, y: h - marginB + 14, fill: '#444', 'font-size': 10, 'text-anchor': 'end', transform: `rotate(-40, ${x + barW/2}, ${h - marginB + 14})` }, svg);
+    txt.textContent = lbl;
+  });
+
+  // axes
+  svgEl('line', { x1: marginL, x2: marginL, y1: marginT, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+  svgEl('line', { x1: marginL, x2: w - marginR, y1: h - marginB, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+
+  // y label
+  const yLblEl = svgEl('text', { x: 14, y: marginT + plotH / 2, fill: '#444', 'font-size': 11, 'text-anchor': 'middle', 'font-weight': '600', transform: `rotate(-90, 14, ${marginT + plotH/2})` }, svg);
+  yLblEl.textContent = yLabel || '';
+
+  container.appendChild(svg);
+}
+
+/* ==================== GROUPED BAR CHART ==================== */
+function renderGroupedBar(container) {
+  const models = ['Random Forest', 'XGBoost', 'Logistic Reg'];
+  const metrics = [
+    { name: 'AUC', values: [0.702, 0.687, 0.696], color: '#2e86c1' },
+    { name: 'Accuracy', values: [0.638, 0.629, 0.641], color: '#27ae60' },
+    { name: 'Sensitivity', values: [0.522, 0.510, 0.578], color: '#e74c3c' }
+  ];
+
+  const marginL = 55, marginR = 20, marginT = 15, marginB = 55;
+  const cW = container.clientWidth || 500;
+  const w = Math.max(cW, 400);
+  const h = 300;
+  const plotW = w - marginL - marginR;
+  const plotH = h - marginT - marginB;
+  const nGroups = models.length;
+  const nBars = metrics.length;
+  const groupW = plotW / nGroups;
+  const barW = Math.min(28, groupW / (nBars + 1));
+  const yMax = 1.0;
+  const yScale = v => h - marginB - (v / yMax) * plotH;
+
+  const svg = svgEl('svg', { width: '100%', height: h, viewBox: `0 0 ${w} ${h}`, style: 'font-family:Segoe UI,Arial,sans-serif' });
+
+  // grid
+  for (let i = 0; i <= 5; i++) {
+    const v = (yMax / 5) * i;
+    svgEl('line', { x1: marginL, x2: w - marginR, y1: yScale(v), y2: yScale(v), stroke: '#eee', 'stroke-width': 1 }, svg);
+    svgEl('text', { x: marginL - 8, y: yScale(v) + 4, fill: '#666', 'font-size': 10, 'text-anchor': 'end' }, svg).textContent = v.toFixed(1);
+  }
+
+  models.forEach((model, gi) => {
+    const gx = marginL + gi * groupW + groupW / 2;
+    metrics.forEach((m, mi) => {
+      const x = gx - (nBars * barW) / 2 + mi * barW;
+      const val = m.values[gi];
+      const bh = Math.max(1, (val / yMax) * plotH);
+      const bar = svgEl('rect', { x: x, y: yScale(val), width: barW - 2, height: bh, fill: m.color, rx: 2, cursor: 'pointer' }, svg);
+      bar.addEventListener('mouseenter', e => showTooltip(e, `<strong>${model}</strong><br>${m.name}: ${val.toFixed(3)}`));
+      bar.addEventListener('mousemove', e => showTooltip(e, `<strong>${model}</strong><br>${m.name}: ${val.toFixed(3)}`));
+      bar.addEventListener('mouseleave', hideTooltip);
+
+      svgEl('text', { x: x + (barW - 2) / 2, y: yScale(val) - 4, fill: '#444', 'font-size': 9, 'text-anchor': 'middle' }, svg).textContent = val.toFixed(3);
+    });
+    svgEl('text', { x: gx, y: h - marginB + 16, fill: '#444', 'font-size': 11, 'text-anchor': 'middle' }, svg).textContent = model;
+  });
+
+  // axes
+  svgEl('line', { x1: marginL, x2: marginL, y1: marginT, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+  svgEl('line', { x1: marginL, x2: w - marginR, y1: h - marginB, y2: h - marginB, stroke: '#666', 'stroke-width': 1 }, svg);
+
+  const yLbl = svgEl('text', { x: 14, y: marginT + plotH / 2, fill: '#444', 'font-size': 11, 'text-anchor': 'middle', 'font-weight': '600', transform: `rotate(-90, 14, ${marginT + plotH/2})` }, svg);
+  yLbl.textContent = 'Score';
+
+  // legend
+  const legend = document.createElement('div');
+  legend.className = 'legend';
+  legend.style.justifyContent = 'center';
+  metrics.forEach(m => {
+    legend.innerHTML += `<span class="legend-item"><span class="legend-swatch" style="background:${m.color}"></span>${m.name}</span>`;
+  });
+
+  container.appendChild(svg);
+  container.appendChild(legend);
+}
+
+/* ==================== DONUT CHART ==================== */
+function renderDonut(container, data) {
+  const elisa = data.filter(s => s.assay === 'ELISA').length;
+  const lcms = data.filter(s => s.assay === 'LC-MS/MS').length;
+  const total = elisa + lcms;
+  if (total === 0) { container.innerHTML = '<p style="color:#999;padding:20px;">No data.</p>'; return; }
+
+  const w = 300, h = 280;
+  const cx = w / 2, cy = 130, R = 90, r = 55;
+
+  const svg = svgEl('svg', { width: '100%', height: h, viewBox: `0 0 ${w} ${h}`, style: 'font-family:Segoe UI,Arial,sans-serif' });
+
+  const slices = [
+    { label: 'ELISA', count: elisa, color: '#3498db' },
+    { label: 'LC-MS/MS', count: lcms, color: '#e74c3c' }
+  ];
+
+  let cumAngle = -Math.PI / 2;
+  slices.forEach(sl => {
+    if (sl.count === 0) return;
+    const angle = (sl.count / total) * 2 * Math.PI;
+    const startAngle = cumAngle;
+    const endAngle = cumAngle + angle;
+
+    const x1o = cx + R * Math.cos(startAngle);
+    const y1o = cy + R * Math.sin(startAngle);
+    const x2o = cx + R * Math.cos(endAngle);
+    const y2o = cy + R * Math.sin(endAngle);
+    const x1i = cx + r * Math.cos(endAngle);
+    const y1i = cy + r * Math.sin(endAngle);
+    const x2i = cx + r * Math.cos(startAngle);
+    const y2i = cy + r * Math.sin(startAngle);
+
+    const large = angle > Math.PI ? 1 : 0;
+    const d = `M ${x1o} ${y1o} A ${R} ${R} 0 ${large} 1 ${x2o} ${y2o} L ${x1i} ${y1i} A ${r} ${r} 0 ${large} 0 ${x2i} ${y2i} Z`;
+
+    const path = svgEl('path', { d: d, fill: sl.color, stroke: '#fff', 'stroke-width': 2, cursor: 'pointer' }, svg);
+    const pct = ((sl.count / total) * 100).toFixed(0);
+    path.addEventListener('mouseenter', e => showTooltip(e, `<strong>${sl.label}</strong><br>${sl.count} studies (${pct}%)`));
+    path.addEventListener('mousemove', e => showTooltip(e, `<strong>${sl.label}</strong><br>${sl.count} studies (${pct}%)`));
+    path.addEventListener('mouseleave', hideTooltip);
+
+    // label on arc midpoint
+    const midA = startAngle + angle / 2;
+    const lR = (R + r) / 2;
+    const lx = cx + lR * Math.cos(midA);
+    const ly = cy + lR * Math.sin(midA);
+    svgEl('text', { x: lx, y: ly + 4, fill: '#fff', 'font-size': 11, 'text-anchor': 'middle', 'font-weight': '600' }, svg).textContent = pct + '%';
+
+    cumAngle = endAngle;
+  });
+
+  // center text
+  svgEl('text', { x: cx, y: cy - 4, fill: '#444', 'font-size': 13, 'text-anchor': 'middle', 'font-weight': '700' }, svg).textContent = total;
+  svgEl('text', { x: cx, y: cy + 13, fill: '#888', 'font-size': 10, 'text-anchor': 'middle' }, svg).textContent = 'studies';
+
+  // legend
+  const ly = 245;
+  slices.forEach((sl, i) => {
+    const lx = w / 2 - 70 + i * 120;
+    svgEl('rect', { x: lx, y: ly, width: 12, height: 12, fill: sl.color, rx: 2 }, svg);
+    svgEl('text', { x: lx + 18, y: ly + 10, fill: '#444', 'font-size': 11 }, svg).textContent = `${sl.label} (${sl.count})`;
+  });
+
+  container.appendChild(svg);
+}
+
+/* ==================== TIMELINE BAR ==================== */
+function renderTimeline(container, data) {
+  const years = {};
+  data.forEach(s => { years[s.year] = (years[s.year] || 0) + 1; });
+  const yrs = Object.keys(years).sort();
+  if (yrs.length === 0) { container.innerHTML = '<p style="color:#999;padding:20px;">No data.</p>'; return; }
+
+  const vals = yrs.map(y => years[y]);
+  const cols = yrs.map(() => '#2e86c1');
+  const tips = yrs.map(y => `<strong>${y}</strong><br>${years[y]} study${years[y]>1?'ies':''}`);
+
+  renderVBar(container, yrs, vals, cols, tips, 'Number of Studies', Math.max(...vals) + 1);
+}
+
+/* ==================== RENDER ALL ==================== */
+function renderAll(data) {
+  // Forest plot
+  clearChart('forestPlot');
+  renderForest(document.getElementById('forestPlot'), data);
+
+  // Region bar
+  clearChart('regionBar');
+  const regions = {};
+  data.forEach(s => { if (!regions[s.region]) regions[s.region] = {totalN:0, wSum:0, k:0}; regions[s.region].totalN += s.n; regions[s.region].wSum += s.def * s.n; regions[s.region].k++; });
+  const rNames = Object.keys(regions);
+  const rDef = rNames.map(r => +((regions[r].wSum / regions[r].totalN).toFixed(1)));
+  const rColors = ['#c0392b', '#2980b9', '#27ae60', '#8e44ad', '#f39c12'];
+  const rTips = rNames.map((r, i) => `<strong>${r}</strong><br>Weighted VDD: ${rDef[i]}%<br>k=${regions[r].k}, N=${regions[r].totalN.toLocaleString()}`);
+  renderHBar(document.getElementById('regionBar'), rNames, rDef, rColors, rTips, 'Weighted VDD (%)', 70);
+
+  // Population bar (sorted descending)
+  clearChart('popBar');
+  const pops = {};
+  data.forEach(s => { if (!pops[s.pop]) pops[s.pop] = {totalN:0, wSum:0, k:0}; pops[s.pop].totalN += s.n; pops[s.pop].wSum += s.def * s.n; pops[s.pop].k++; });
+  const pNames = Object.keys(pops).sort((a,b) => (pops[b].wSum/pops[b].totalN) - (pops[a].wSum/pops[a].totalN));
+  const pLabels = pNames.map(p => popLabels[p] || p);
+  const pDef = pNames.map(p => +((pops[p].wSum / pops[p].totalN).toFixed(1)));
+  const pCols = pNames.map(p => popColors[p] || '#999');
+  const pTips = pNames.map((p, i) => `<strong>${popLabels[p]||p}</strong><br>Weighted VDD: ${pDef[i]}%<br>k=${pops[p].k}, N=${pops[p].totalN}`);
+  renderHBar(document.getElementById('popBar'), pLabels, pDef, pCols, pTips, 'Weighted VDD (%)', 100);
+
+  // ML bar (static, not filtered)
+  clearChart('mlBar');
+  renderGroupedBar(document.getElementById('mlBar'));
+
+  // Assay donut
+  clearChart('assayPie');
+  renderDonut(document.getElementById('assayPie'), data);
+
+  // Timeline
+  clearChart('timeline');
+  renderTimeline(document.getElementById('timeline'), data);
+
+  // Table
+  const sorted = [...data].sort((a,b) => a.year - b.year || a.author.localeCompare(b.author));
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  sorted.forEach(s => {
+    const tag = s.def >= 60 ? '<span class="tag tag-high">High</span>' : s.def >= 30 ? '<span class="tag tag-mod">Moderate</span>' : '<span class="tag tag-low">Low</span>';
+    tbody.innerHTML += `<tr><td>${s.id}</td><td>${s.author} (${s.year})</td><td>${s.region}</td><td>${popLabels[s.pop]||s.pop}</td><td>${s.n.toLocaleString()}</td><td>${s.mean}</td><td>${s.def}%</td><td>${s.assay}</td><td>${tag}</td></tr>`;
+  });
+}
+
+renderAll(DATA);
+
+// Redraw on resize for responsiveness
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => filterData(), 200);
+});
+</script>
+</body>
+</html>

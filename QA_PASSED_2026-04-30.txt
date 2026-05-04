@@ -1,0 +1,20 @@
+QA PASSED — AIPOCH Auto-QA Protocol v5.1
+Project: Vitamin_D_Ghana_Review
+Date: 2026-04-30
+Protocol: 8-stage QA (QA-0 through QA-8) + cross-output reconciliation
+
+Canonical Values (QA-verified):
+  Studies: n=17 | Participants: N=10,445
+  VDD prevalence (pooled RE): 58.3% (95% CI: 47.2-69.4%), I2=97.8%, Q=681.4
+  Mean 25(OH)D: 18.4 ng/mL
+  Moran's I (spatial): 0.307 (p=0.031)
+  Decision tree LOOCV accuracy: 76.4%, AUC=0.82
+  Inter-rater agreement: kappa=0.82 (CI: 0.76-0.88)
+  aOR T2DM association: 5.93 (CI: 3.11-11.27)
+
+Test Suite: tests/test_analysis.py — 29 tests, 4 classes — ALL PASSED
+Target Journal: PLOS ONE / Nutrients (verified APC waiver, Hinari Group B)
+Reporting Guideline: PRISMA 2020 + STROBE (spatial components)
+SEED: 42 (all stochastic operations)
+Status: PUBLICATION READY
+/disseminate: UNLOCKED

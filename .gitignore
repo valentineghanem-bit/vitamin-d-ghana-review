@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.env
+.venv
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# pytest caches
+.pytest_cache/
+pytest-cache-files-*/
+
+# R
+.Rhistory
+.RData
+.Rproj.user
+renv/library/
+renv/staging/
+
+# Data (large geospatial files — use Git LFS or Zenodo)
+data/*.geojson
+data/*.shp
+data/*.dbf
+data/*.shx
+data/*.prj
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+
+*.docx
+*.pdf
+*.env

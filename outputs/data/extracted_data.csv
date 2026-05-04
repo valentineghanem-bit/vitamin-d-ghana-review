@@ -1,0 +1,18 @@
+Study_ID,Author_Year,Region,Region_numeric,Design,Population_Category,Population_Category_numeric,N,Mean_25OHD,SD,VDD_Prevalence,Assay,Assay_numeric,NOS_Score,Publication_Year,Latitude,Longitude,Prop_Female,Mean_Age,High_VDD,DOI
+1,Durazo-Arvizu 2014,Ashanti,1,Cross-sectional,Healthy adults,1,500,17.0,6.9,62.0,LC-MS/MS,0,9,2014,6.7,-1.6,0.5,35.0,0,10.3945/ajcn.113.066605
+2,Kramer 2016,Ashanti,1,Cross-sectional,Healthy adults,1,1200,11.8,6.9,92.4,LC-MS/MS,0,8,2016,6.7,-1.6,0.5,35.0,1,10.4158/EP151079.OR
+3,Asare 2017,Greater Accra,2,Observational,BPH patients,2,360,17.3,4.5,60.9,ELISA,1,4,2017,5.55,-0.2,0.0,55.0,0,10.1186/s12906-017-1663-x
+4,Chiang 2017,Ashanti,1,Cross-sectional,Healthy adults,1,479,14.6,6.8,78.3,LC-MS/MS,0,9,2017,6.7,-1.6,0.5,34.4,1,10.1097/HJH.0000000000001203
+5,Fondjo 2017,Ashanti,1,Case-control,T2DM patients,3,843,15.2,3.1,74.1,ELISA,1,8,2017,6.7,-1.6,0.5,45.0,1,10.1371/journal.pone.0175388
+6,Fondjo 2018,Ashanti,1,Cross-sectional,T2DM patients,3,192,13.9,4.5,81.7,ELISA,1,8,2018,6.7,-1.6,1.0,48.0,1,10.1155/2018/9369282
+7,Gernand 2019,Eastern,3,Cross-sectional,Pre-conception women,4,498,16.2,5.7,67.6,LC-MS/MS,0,6,2019,6.1,-0.15,1.0,26.0,0,10.1093/cdn/nzz053
+8,Pobee 2020,Eastern,3,Cross-sectional,Pre-conception women,4,395,16.8,0.9,63.8,LC-MS/MS,0,6,2020,6.1,-0.15,1.0,27.0,0,10.3390/nu12020470
+9,Fondjo 2021,Volta,4,Case-control,Pregnant women,5,780,13.1,6.9,85.3,ELISA,1,9,2021,6.1,0.5,1.0,29.0,1,10.1186/s12884-021-03802-9
+10,Sakyi 2021,Multi-region,5,Cross-sectional,Healthy adults,1,1500,18.5,5.8,54.2,ELISA,1,9,2021,7.9,-1.0,0.5,34.0,0,10.1155/2021/9987141
+11,Fondjo 2022,Ashanti,1,Cross-sectional,Psychiatric patients,6,300,19.8,12.7,47.3,ELISA,1,8,2022,6.7,-1.6,0.5,38.0,0,10.1002/hsr2.858
+12,Sakyi 2022,Ashanti,1,Case-control,RA patients,7,738,20.3,4.2,44.8,ELISA,1,8,2022,6.7,-1.6,0.8,42.0,0,10.1002/iid3.676
+13,Dzudzor 2023,Greater Accra,2,Case-control,CLD patients,8,180,16.5,3.8,65.2,ELISA,1,7,2023,5.55,-0.2,0.5,40.0,0,10.1002/hsr2.1101
+14,Antwi 2024,Multi-region,5,Cross-sectional,Healthy adults,1,1000,18.8,5.8,52.6,ELISA,1,9,2024,7.9,-1.0,0.5,35.0,0,10.1186/s13104-024-06721-y
+15,Fondjo 2024,Ashanti,1,Case-control,Pregnant women,5,462,15.5,4.9,71.3,ELISA,1,8,2024,6.7,-1.57,1.0,29.0,1,10.1371/journal.pone.0303778
+16,Arhin-Aidoo 2025,Western North,6,Case-control,T2DM patients,3,200,21.2,3.5,41.5,ELISA,1,9,2025,6.3,-2.5,0.5,47.0,0,10.1038/s41598-025-96731-y
+17,Ayamah 2025,Ashanti,1,RCT,Pregnant women,5,818,12.4,,88.1,ELISA,1,6,2025,6.75,-1.45,1.0,26.0,1,10.1038/s41598-025-87815-w
