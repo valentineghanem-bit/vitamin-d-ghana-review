@@ -87,21 +87,21 @@ def compute_gi_star(valid: gpd.GeoDataFrame, w, var: str = 'VDD_Prevalence') -> 
 def compute_lisa(valid: gpd.GeoDataFrame, var: str = 'VDD_Prevalence') -> gpd.GeoDataFrame:
  """Local Moran's I (LISA) with Rook contiguity."""
  try:
- w_rook = Rook.from_dataframe(valid)
- w_rook.transform = 'r'
- lisa = Moran_Local(valid[var], w_rook, transformation='r', permutations=PERMS, seed=SEED)
- valid = valid.copy()
- valid['LISA_q'] = lisa.q # 1=HH, 2=LH, 3=LL, 4=HL
- valid['LISA_p'] = lisa.p_sim
- valid['LISA_sig'] = (lisa.p_sim < ALPHA).astype(int)
- valid['LISA_cluster'] = np.where(
- valid['LISA_sig'] == 1,
- valid['LISA_q'].map({1: 'HH', 2: 'LH', 3: 'LL', 4: 'HL'}),
- 'NS'
- )
+  w_rook = Rook.from_dataframe(valid)
+  w_rook.transform = 'r'
+  lisa = Moran_Local(valid[var], w_rook, transformation='r', permutations=PERMS, seed=SEED)
+  valid = valid.copy()
+  valid['LISA_q'] = lisa.q # 1=HH, 2=LH, 3=LL, 4=HL
+  valid['LISA_p'] = lisa.p_sim
+  valid['LISA_sig'] = (lisa.p_sim < ALPHA).astype(int)
+  valid['LISA_cluster'] = np.where(
+  valid['LISA_sig'] == 1,
+  valid['LISA_q'].map({1: 'HH', 2: 'LH', 3: 'LL', 4: 'HL'}),
+  'NS'
+  )
  except Exception as e:
- logger.warning(f"LISA computation failed (likely non-planar geometry): {e}. Skipping LISA.")
- valid['LISA_cluster'] = 'NS'
+  logger.warning(f"LISA computation failed (likely non-planar geometry): {e}. Skipping LISA.")
+  valid['LISA_cluster'] = 'NS'
  return valid
 
 
