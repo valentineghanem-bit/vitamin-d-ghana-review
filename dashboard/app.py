@@ -187,98 +187,98 @@ app.layout = dbc.Container([
 def update_all(pop, reg, sort_by):
  dff = df.copy()
  if pop != 'All':
- dff = dff[dff['Population'] == pop]
- if reg != 'All':
- dff = dff[dff['Region'] == reg]
+  dff = dff[dff['Population'] == pop]
+  if reg != 'All':
+   dff = dff[dff['Region'] == reg]
 
- sort_col = {'VDD Prevalence':'VDD_Pct','Mean 25(OH)D':'Mean_25OHD',
- 'Sample Size':'N','Year':'Year'}.get(sort_by,'VDD_Pct')
- dff_sorted = dff.dropna(subset=['Mean_25OHD']).sort_values(sort_col)
+   sort_col = {'VDD Prevalence':'VDD_Pct','Mean 25(OH)D':'Mean_25OHD',
+   'Sample Size':'N','Year':'Year'}.get(sort_by,'VDD_Pct')
+   dff_sorted = dff.dropna(subset=['Mean_25OHD']).sort_values(sort_col)
 
  # Forest plot
- forest_fig = go.Figure()
- forest_fig.add_trace(go.Scatter(
- x=dff_sorted['Mean_25OHD'], y=dff_sorted['Author'],
- mode='markers',
- error_x=dict(type='data', array=1.96*dff_sorted['SD']/np.sqrt(dff_sorted['N']),
- arrayminus=1.96*dff_sorted['SD']/np.sqrt(dff_sorted['N']),
- color='#2E75B6', thickness=2, width=5),
- marker=dict(color='#1F3864', size=10),
- hovertemplate='<b>%{y}</b><br>Mean: %{x:.1f} ng/mL<extra></extra>'
- ))
- forest_fig.add_vline(x=18.4, line_dash='dot', line_color='#C9A84C',
- annotation_text='Pooled 18.4', annotation_position='top')
- forest_fig.add_vline(x=20, line_dash='dash', line_color='#E74C3C',
- annotation_text='VDD threshold', annotation_position='top')
- forest_fig.update_layout(xaxis_title='Mean 25(OH)D (ng/mL)',
- margin=dict(l=200,r=20,t=20,b=40),
- plot_bgcolor='#FAFBFD', paper_bgcolor='white')
+   forest_fig = go.Figure()
+   forest_fig.add_trace(go.Scatter(
+   x=dff_sorted['Mean_25OHD'], y=dff_sorted['Author'],
+   mode='markers',
+   error_x=dict(type='data', array=1.96*dff_sorted['SD']/np.sqrt(dff_sorted['N']),
+   arrayminus=1.96*dff_sorted['SD']/np.sqrt(dff_sorted['N']),
+   color='#2E75B6', thickness=2, width=5),
+   marker=dict(color='#1F3864', size=10),
+   hovertemplate='<b>%{y}</b><br>Mean: %{x:.1f} ng/mL<extra></extra>'
+   ))
+   forest_fig.add_vline(x=18.4, line_dash='dot', line_color='#C9A84C',
+   annotation_text='Pooled 18.4', annotation_position='top')
+   forest_fig.add_vline(x=20, line_dash='dash', line_color='#E74C3C',
+   annotation_text='VDD threshold', annotation_position='top')
+   forest_fig.update_layout(xaxis_title='Mean 25(OH)D (ng/mL)',
+   margin=dict(l=200,r=20,t=20,b=40),
+   plot_bgcolor='#FAFBFD', paper_bgcolor='white')
 
  # Subgroup plot
- subgroup_data = [
- ('General', 63.1), ('Pregnant', 56.8), ('T2DM', 88.2), ('RA', 74.1),
- ('CLD', 67.6), ('Preeclampsia', 78.3), ('BPH', 63.8), ('Psychiatric', 85.3),
- ]
- sg_df = pd.DataFrame(subgroup_data, columns=['Population','VDD']).sort_values('VDD')
- subgroup_fig = px.bar(sg_df, x='VDD', y='Population', orientation='h',
- color='VDD', color_continuous_scale='RdYlGn_r',
- labels={'VDD':'VDD Prevalence (%)'},
- template='plotly_white')
- subgroup_fig.add_vline(x=58.3, line_dash='dot', line_color='#C9A84C',
- annotation_text='Pooled 58.3%')
- subgroup_fig.update_layout(coloraxis_showscale=False, margin=dict(l=120,r=40,t=20,b=40))
+   subgroup_data = [
+   ('General', 63.1), ('Pregnant', 56.8), ('T2DM', 88.2), ('RA', 74.1),
+   ('CLD', 67.6), ('Preeclampsia', 78.3), ('BPH', 63.8), ('Psychiatric', 85.3),
+   ]
+   sg_df = pd.DataFrame(subgroup_data, columns=['Population','VDD']).sort_values('VDD')
+   subgroup_fig = px.bar(sg_df, x='VDD', y='Population', orientation='h',
+   color='VDD', color_continuous_scale='RdYlGn_r',
+   labels={'VDD':'VDD Prevalence (%)'},
+   template='plotly_white')
+   subgroup_fig.add_vline(x=58.3, line_dash='dot', line_color='#C9A84C',
+   annotation_text='Pooled 58.3%')
+   subgroup_fig.update_layout(coloraxis_showscale=False, margin=dict(l=120,r=40,t=20,b=40))
 
  # Spatial plot
- spatial_regions = [
- ('Ashanti',+2.41,'HH'), ('Volta',+1.97,'HH'), ('Greater Accra',+1.82,'HH'),
- ('Northern',+0.91,'NS'), ('Eastern',+0.43,'NS'), ('Brong-Ahafo',-0.12,'NS'),
- ('Western',-0.55,'NS'), ('Central',-0.87,'LL'), ('Upper West',-0.98,'NS'),
- ('Upper East',-1.21,'LL'),
- ]
- sp_df = pd.DataFrame(spatial_regions, columns=['Region','Gi_z','LISA'])
- sp_colors = {'HH':'#d7191c','LL':'#4575b4','NS':'#cccccc'}
- spatial_fig = px.scatter(sp_df, x='Region', y='Gi_z', color='LISA',
- color_discrete_map=sp_colors,
- labels={'Gi_z':'Gi* z-score'},
- template='plotly_white', size_max=15)
- spatial_fig.add_hline(y=1.96, line_dash='dash', line_color='#d7191c',
- annotation_text='z=1.96 (hotspot)', annotation_position='right')
- spatial_fig.add_hline(y=-1.96, line_dash='dash', line_color='#4575b4',
- annotation_text='z=-1.96 (coldspot)', annotation_position='right')
- spatial_fig.update_layout(margin=dict(l=40,r=40,t=20,b=80),
- xaxis_tickangle=-30)
+   spatial_regions = [
+   ('Ashanti',+2.41,'HH'), ('Volta',+1.97,'HH'), ('Greater Accra',+1.82,'HH'),
+   ('Northern',+0.91,'NS'), ('Eastern',+0.43,'NS'), ('Brong-Ahafo',-0.12,'NS'),
+   ('Western',-0.55,'NS'), ('Central',-0.87,'LL'), ('Upper West',-0.98,'NS'),
+   ('Upper East',-1.21,'LL'),
+   ]
+   sp_df = pd.DataFrame(spatial_regions, columns=['Region','Gi_z','LISA'])
+   sp_colors = {'HH':'#d7191c','LL':'#4575b4','NS':'#cccccc'}
+   spatial_fig = px.scatter(sp_df, x='Region', y='Gi_z', color='LISA',
+   color_discrete_map=sp_colors,
+   labels={'Gi_z':'Gi* z-score'},
+   template='plotly_white', size_max=15)
+   spatial_fig.add_hline(y=1.96, line_dash='dash', line_color='#d7191c',
+   annotation_text='z=1.96 (hotspot)', annotation_position='right')
+   spatial_fig.add_hline(y=-1.96, line_dash='dash', line_color='#4575b4',
+   annotation_text='z=-1.96 (coldspot)', annotation_position='right')
+   spatial_fig.update_layout(margin=dict(l=40,r=40,t=20,b=80),
+   xaxis_tickangle=-30)
 
  # Meta-regression
- mr_data = [
- ('Population Cat.', -1.82, 0.61, 0.003),
- ('Assay Method', -1.24, 0.54, 0.021),
- ('NOS Score', 0.31, 0.29, 0.286),
- ('Pub. Year', 0.08, 0.11, 0.481),
- ('Mean Age', -0.14, 0.18, 0.443),
- ('Region', -0.22, 0.33, 0.504),
- ]
- mr_df = pd.DataFrame(mr_data, columns=['Moderator','Beta','SE','p'])
- mr_df['Color'] = mr_df['p'].apply(lambda p: '#d73027' if p<0.05 else '#74add1')
- mr_df['CI_hi'] = mr_df['Beta'] + 1.96*mr_df['SE']
- mr_df['CI_lo'] = mr_df['Beta'] - 1.96*mr_df['SE']
- mr_fig = go.Figure()
- mr_fig.add_trace(go.Scatter(
- x=mr_df['Beta'], y=mr_df['Moderator'], mode='markers',
- error_x=dict(type='data', array=mr_df['CI_hi']-mr_df['Beta'],
- arrayminus=mr_df['Beta']-mr_df['CI_lo'],
- color='#888', thickness=2, width=5),
- marker=dict(color=mr_df['Color'], size=14, symbol='diamond'),
- hovertemplate='<b>%{y}</b><br>beta=%{x:.2f}<extra></extra>'
- ))
- mr_fig.add_vline(x=0, line_color='#999')
- mr_fig.update_layout(xaxis_title='Regression Coefficient (beta)',
- plot_bgcolor='#FAFBFD', paper_bgcolor='white',
- margin=dict(l=130,r=20,t=20,b=40))
- mr_fig.add_annotation(x=-2.5, y=5.5, text='R²=72.3%<br>Resid. I²=91.3%',
- showarrow=False, bgcolor='rgba(255,255,200,0.85)',
- font=dict(size=11))
+   mr_data = [
+   ('Population Cat.', -1.82, 0.61, 0.003),
+   ('Assay Method', -1.24, 0.54, 0.021),
+   ('NOS Score', 0.31, 0.29, 0.286),
+   ('Pub. Year', 0.08, 0.11, 0.481),
+   ('Mean Age', -0.14, 0.18, 0.443),
+   ('Region', -0.22, 0.33, 0.504),
+   ]
+   mr_df = pd.DataFrame(mr_data, columns=['Moderator','Beta','SE','p'])
+   mr_df['Color'] = mr_df['p'].apply(lambda p: '#d73027' if p<0.05 else '#74add1')
+   mr_df['CI_hi'] = mr_df['Beta'] + 1.96*mr_df['SE']
+   mr_df['CI_lo'] = mr_df['Beta'] - 1.96*mr_df['SE']
+   mr_fig = go.Figure()
+   mr_fig.add_trace(go.Scatter(
+   x=mr_df['Beta'], y=mr_df['Moderator'], mode='markers',
+   error_x=dict(type='data', array=mr_df['CI_hi']-mr_df['Beta'],
+   arrayminus=mr_df['Beta']-mr_df['CI_lo'],
+   color='#888', thickness=2, width=5),
+   marker=dict(color=mr_df['Color'], size=14, symbol='diamond'),
+   hovertemplate='<b>%{y}</b><br>beta=%{x:.2f}<extra></extra>'
+   ))
+   mr_fig.add_vline(x=0, line_color='#999')
+   mr_fig.update_layout(xaxis_title='Regression Coefficient (beta)',
+   plot_bgcolor='#FAFBFD', paper_bgcolor='white',
+   margin=dict(l=130,r=20,t=20,b=40))
+   mr_fig.add_annotation(x=-2.5, y=5.5, text='R²=72.3%<br>Resid. I²=91.3%',
+   showarrow=False, bgcolor='rgba(255,255,200,0.85)',
+   font=dict(size=11))
 
- return forest_fig, subgroup_fig, spatial_fig, mr_fig, dff.to_dict('records')
+   return forest_fig, subgroup_fig, spatial_fig, mr_fig, dff.to_dict('records')
 
 
 if __name__ == '__main__':

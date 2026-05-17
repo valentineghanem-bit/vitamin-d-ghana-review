@@ -131,27 +131,27 @@ def plot_spatial_summary(valid: gpd.GeoDataFrame, moran_result: dict,
  ax.legend(fontsize=10)
  # Label regions
  for _, row in valid.iterrows():
- if abs(vdd_z[valid.index.get_loc(_)]) > 0.8:
- ax.annotate(row['REGION'], (vdd_z[valid.index.get_loc(_)], lag_z[valid.index.get_loc(_)]),
- fontsize=8, ha='center', va='bottom')
+  if abs(vdd_z[valid.index.get_loc(_)]) > 0.8:
+   ax.annotate(row['REGION'], (vdd_z[valid.index.get_loc(_)], lag_z[valid.index.get_loc(_)]),
+   fontsize=8, ha='center', va='bottom')
 
  # -- Panel B: LISA cluster map --
- ax2 = axes[1]
- cluster_colors = {'HH': '#d7191c', 'LH': '#fdae61', 'LL': '#4575b4', 'HL': '#abd9e9', 'NS': '#f0f0f0'}
- if 'LISA_cluster' in valid.columns:
- valid['_color'] = valid['LISA_cluster'].map(cluster_colors).fillna('#f0f0f0')
+   ax2 = axes[1]
+   cluster_colors = {'HH': '#d7191c', 'LH': '#fdae61', 'LL': '#4575b4', 'HL': '#abd9e9', 'NS': '#f0f0f0'}
+   if 'LISA_cluster' in valid.columns:
+    valid['_color'] = valid['LISA_cluster'].map(cluster_colors).fillna('#f0f0f0')
  else:
- valid['_color'] = '#f0f0f0'
- valid.plot(color=valid['_color'], ax=ax2, edgecolor='grey', linewidth=0.7)
- patches = [mpatches.Patch(color=v, label=k) for k, v in cluster_colors.items()]
- ax2.legend(handles=patches, loc='lower right', fontsize=9, title='LISA cluster (p<0.05)')
- ax2.set_title("Bivariate LISA Cluster Map\n(VDD Prevalence, Rook Contiguity, p<0.05)", fontsize=13)
- ax2.axis('off')
+  valid['_color'] = '#f0f0f0'
+  valid.plot(color=valid['_color'], ax=ax2, edgecolor='grey', linewidth=0.7)
+  patches = [mpatches.Patch(color=v, label=k) for k, v in cluster_colors.items()]
+  ax2.legend(handles=patches, loc='lower right', fontsize=9, title='LISA cluster (p<0.05)')
+  ax2.set_title("Bivariate LISA Cluster Map\n(VDD Prevalence, Rook Contiguity, p<0.05)", fontsize=13)
+  ax2.axis('off')
 
- plt.tight_layout()
- plt.savefig(out_path, dpi=300, bbox_inches='tight')
- plt.close()
- logger.info(f"Saved: {out_path}")
+  plt.tight_layout()
+  plt.savefig(out_path, dpi=300, bbox_inches='tight')
+  plt.close()
+  logger.info(f"Saved: {out_path}")
 
 
 if __name__ == '__main__':

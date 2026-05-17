@@ -43,10 +43,10 @@ def run_step(name: str, config: dict) -> float:
  )
  elapsed = time.time() - t0
  if result.returncode != 0:
- logger.error(f"STEP [{name}] FAILED (exit code {result.returncode})")
- sys.exit(result.returncode)
- logger.info(f"STEP [{name}] OK in {elapsed:.1f}s")
- return elapsed
+  logger.error(f"STEP [{name}] FAILED (exit code {result.returncode})")
+  sys.exit(result.returncode)
+  logger.info(f"STEP [{name}] OK in {elapsed:.1f}s")
+  return elapsed
 
 
 def validate_outputs() -> bool:
@@ -57,12 +57,12 @@ def validate_outputs() -> bool:
  ]
  all_ok = True
  for f in expected:
- exists = os.path.exists(f)
- status = 'OK' if exists else 'MISSING'
- logger.info(f" [{status}] {f}")
- if not exists:
- all_ok = False
- return all_ok
+  exists = os.path.exists(f)
+  status = 'OK' if exists else 'MISSING'
+  logger.info(f" [{status}] {f}")
+  if not exists:
+   all_ok = False
+   return all_ok
 
 
 if __name__ == '__main__':
@@ -75,28 +75,28 @@ if __name__ == '__main__':
  os.makedirs('figures', exist_ok=True)
 
  if args.validate_only:
- ok = validate_outputs()
- sys.exit(0 if ok else 1)
+  ok = validate_outputs()
+  sys.exit(0 if ok else 1)
 
- steps_to_run = list(STEPS.keys()) if args.all else ([args.step] if args.step else [])
- if not steps_to_run:
- parser.print_help()
- sys.exit(0)
+  steps_to_run = list(STEPS.keys()) if args.all else ([args.step] if args.step else [])
+  if not steps_to_run:
+   parser.print_help()
+   sys.exit(0)
 
- total_start = time.time()
- timings = {}
- for name in steps_to_run:
- timings[name] = run_step(name, STEPS[name])
+   total_start = time.time()
+   timings = {}
+   for name in steps_to_run:
+    timings[name] = run_step(name, STEPS[name])
 
- total = time.time() - total_start
- logger.info(f"\n{'='*60}")
- logger.info("PIPELINE COMPLETE")
- for name, t in timings.items():
- logger.info(f" {name}: {t:.1f}s")
- logger.info(f" TOTAL: {total:.1f}s")
- logger.info(f"{'='*60}")
+    total = time.time() - total_start
+    logger.info(f"\n{'='*60}")
+    logger.info("PIPELINE COMPLETE")
+    for name, t in timings.items():
+     logger.info(f" {name}: {t:.1f}s")
+     logger.info(f" TOTAL: {total:.1f}s")
+     logger.info(f"{'='*60}")
 
- ok = validate_outputs()
- if not ok:
- logger.error("Some expected outputs are missing\!")
- sys.exit(1)
+     ok = validate_outputs()
+     if not ok:
+      logger.error("Some expected outputs are missing\!")
+      sys.exit(1)
