@@ -17,7 +17,7 @@ from dash import dcc, html, dash_table, Input, Output, callback
 import dash_bootstrap_components as dbc
 
 # ── Canonical data (verified against Master CSV) ─────────────────────────────
-DATA_CSV = os.path.join(os.path.dirname(__file__), 'data', 'extracted_data.csv')
+DATA_CSV = os.path.join(os.path.dirname(__file__), '..', 'outputs', 'data', 'extracted_data.csv')
 
 STUDIES = [
  {'Ref':'[1]','Author':'Acquah et al., 2017','Region':'Greater Accra','Population':'General',
