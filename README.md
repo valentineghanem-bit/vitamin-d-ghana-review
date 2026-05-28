@@ -9,24 +9,22 @@
 **Date:** 2025
 **Status:** Pre-registered (OSF) | Manuscript under review
 
-> Valentine Golden Ghanem (2025). *Vitamin D Status in Ghana: A Mixed-Methods Narrative Review of Prevalence, Determinants, and Health Implications.* GitHub repository. https://github.com/valentineghanem-bit/vitamin-d-ghana-review
+**Pre-registration:** [https://doi.org/10.17605/OSF.IO/53GBT](https://doi.org/10.17605/OSF.IO/53GBT)
 
 ---
 
 ## 1. Abstract
 
-This mixed-methods narrative review synthesises evidence on vitamin D deficiency (VDD) in Ghana across 17 studies (N=10,445 participants). Random-effects meta-analysis estimates pooled VDD prevalence and mean 25(OH)D. Spatial analysis using Global Moran's I, Getis-Ord Gi*, and LISA identifies regional clustering of VDD burden. A CART decision tree with leave-one-out cross-validation predicts VDD risk, and multivariable logistic regression quantifies the association between VDD and type 2 diabetes mellitus.
+This mixed-methods narrative review synthesises evidence on vitamin D deficiency (VDD) in Ghana across 17 studies (N = 10,445 participants). Random-effects meta-analysis estimates pooled VDD prevalence and mean serum 25(OH)D concentration. Spatial analysis using Global Moran's I, Getis-Ord Gi*, and LISA identifies regional clustering of VDD burden across Ghana's 16 administrative regions. A CART decision tree with leave-one-out cross-validation predicts VDD risk at the regional level, and multivariable logistic regression quantifies the independent association between VDD and type 2 diabetes mellitus (T2DM).
 
-**Pre-registration:** [https://doi.org/10.17605/OSF.IO/53GBT](https://doi.org/10.17605/OSF.IO/53GBT)
-
-**Note on unit conversion:** Studies reporting 25(OH)D in nmol/L were converted to ng/mL by dividing by 2.496.
+> **Note on unit conversion:** Studies reporting 25(OH)D in nmol/L were converted to ng/mL by dividing by 2.496.
 
 ---
 
 ## 2. Research Question & Aims
 
-- **Primary:** Estimate the pooled prevalence of vitamin D deficiency (VDD) in the Ghanaian population.
-- **Secondary:** (a) Characterise regional and demographic determinants of VDD; (b) identify spatial clusters of VDD burden across Ghana's regions; (c) build a parsimonious predictive model of VDD risk; (d) quantify the association between VDD and type 2 diabetes mellitus.
+- **Primary:** Estimate the pooled prevalence of vitamin D deficiency in the Ghanaian population.
+- **Secondary:** (a) Characterise regional and demographic determinants of VDD; (b) identify spatial clusters of VDD burden across Ghana's regions; (c) build a parsimonious predictive model of VDD risk; (d) quantify the independent association between VDD and type 2 diabetes mellitus.
 
 ---
 
@@ -39,7 +37,8 @@ This mixed-methods narrative review synthesises evidence on vitamin D deficiency
 | Getis-Ord Gi* | esda | Regional hotspot identification |
 | LISA | esda | Local cluster detection |
 | CART (LOOCV) | scikit-learn | VDD risk prediction |
-| Logistic regression | scikit-learn / statsmodels | T2DM–VDD association (aOR) |
+| Multivariable logistic regression | statsmodels | T2DM–VDD association (adjusted OR) |
+| Spatial diagnostics | spdep / spatialreg (R) | OLS / SLM / SEM model selection |
 
 ---
 
@@ -47,11 +46,11 @@ This mixed-methods narrative review synthesises evidence on vitamin D deficiency
 
 | Source | Variables | Year | Access |
 |--------|-----------|------|--------|
-| Published literature (systematic search of PubMed, Scopus, Web of Science) | 25(OH)D levels, VDD prevalence, clinical outcomes | Various | Open |
+| Published literature (PubMed, Scopus, Web of Science) | 25(OH)D levels, VDD prevalence, clinical outcomes | Various | Open — peer-reviewed publications |
 | Ghana DHS | Regional population denominators | 2014 / 2022 | [dhsprogram.com](https://dhsprogram.com) (registration) |
 | Ghana Statistical Service | Regional administrative boundaries | 2021 | [statsghana.gov.gh](https://statsghana.gov.gh) |
 
-> All literature data are extracted from published, peer-reviewed sources. No primary data collection.
+> All literature data extracted from published peer-reviewed sources. No primary data collection.
 
 ---
 
@@ -62,12 +61,12 @@ This mixed-methods narrative review synthesises evidence on vitamin D deficiency
 | Studies included (k) | 17 |
 | Total participants (N) | 10,445 |
 | Pooled VDD prevalence | 58.3% (95% CI: 47.2–69.4%) |
-| Pooled mean 25(OH)D | 18.4 ng/mL (95% CI: 15.8–21.0); I²=97.8% |
-| Highest burden group | T2DM patients (88.2%) |
-| Ashanti region Gi* hotspot | +2.41 |
-| Global Moran's I (VDD) | 0.307 (z=2.14, p=0.031) |
-| CART accuracy (LOOCV) | 76.4%; AUC=0.82 |
-| Adjusted OR T2DM–VDD | 5.92 (95% CI: 3.11–11.27) |
+| Pooled mean 25(OH)D | 18.4 ng/mL (95% CI: 15.8–21.0); I² = 97.8% |
+| Highest-burden subgroup | T2DM patients (88.2%) |
+| Ashanti region Gi* hotspot | z = +2.41 |
+| Global Moran's I (VDD) | 0.307 (z = 2.14, p = 0.031) |
+| CART accuracy (LOOCV) | 76.4%; AUC = 0.82 |
+| Adjusted OR (T2DM–VDD) | 5.92 (95% CI: 3.11–11.27) |
 
 ---
 
@@ -76,18 +75,23 @@ This mixed-methods narrative review synthesises evidence on vitamin D deficiency
 ```
 vitamin-d-ghana-review/
 ├── data/
-│   ├── extracted_data.csv
+│   ├── extracted_data.csv          # Extracted literature data
 │   └── data_dictionary.md
 ├── scripts/
-│   ├── meta_analysis.R          # Random-effects meta-analysis
-│   ├── spatial_analysis.py      # Moran's I, Gi*, LISA
-│   ├── decision_tree.py         # CART with LOOCV
-│   └── analysis_pipeline.py     # Full analytical pipeline
+│   ├── meta_analysis.R             # Random-effects meta-analysis
+│   ├── spatial_analysis.py         # Moran's I, Gi*, LISA
+│   ├── decision_tree.py            # CART with LOOCV
+│   ├── analysis_pipeline.py        # Full analytical pipeline
+│   ├── spatial_utils.py            # Reusable spatial analysis utilities
+│   └── spatial_diagnostics.R       # R: spatial autocorrelation diagnostics
+├── app.py                          # Plotly Dash interactive application
+├── analysis.R                      # R: meta-analysis + spatial regression diagnostics
 ├── dashboard/
-│   └── dashboard.html           # Self-contained HTML dashboard
-├── tests/
+│   └── dashboard.html
+├── poster/
+│   └── vitamin_d_ghana_poster.html
 ├── figures/
-├── app.py                       # Plotly Dash interactive application
+├── tests/
 ├── requirements.txt
 ├── renv.lock
 ├── Dockerfile
@@ -100,88 +104,93 @@ vitamin-d-ghana-review/
 ## 7. Reproducibility
 
 ### 7.1 Requirements
-- Python 3.12 (see `requirements.txt` for pinned versions)
-- R 4.3+ (for R scripts; see `renv.lock` or `analysis.R` header for pinned packages)
-- Random seed: 42 throughout (set via `random_state=42` and `np.random.seed(42)`)
+
+- Python 3.12 (pinned in `requirements.txt`)
+- R 4.3+ with packages: metafor, spdep, spatialreg, dplyr (see `analysis.R` header)
+- Random seed: 42 throughout
 - Estimated runtime: ~2–3 minutes on a standard laptop
 - Tested on: Ubuntu 22.04 / macOS 14 / Windows 11 (CI: GitHub Actions)
 
 ### 7.2 Clone & install
+
 ```bash
 git clone https://github.com/valentineghanem-bit/vitamin-d-ghana-review.git
 cd vitamin-d-ghana-review
 pip install -r requirements.txt
-# For R scripts (optional):
+# For R scripts:
 Rscript -e "if (!requireNamespace('renv', quietly=TRUE)) install.packages('renv'); renv::restore()"
 ```
 
 ### 7.3 Run the analytical pipeline
-```bash
-# Full Python pipeline
-python scripts/analysis_pipeline.py --all
 
-# R meta-analysis only
-Rscript scripts/meta_analysis.R
+```bash
+python scripts/analysis_pipeline.py
 ```
 
 ### 7.4 Run the test suite
+
 ```bash
 pytest tests/ -v
 ```
 
 ### 7.5 Launch the interactive Dash application
+
 ```bash
 python app.py
-# Navigate to http://127.0.0.1:8050 in your browser
+# Visit http://127.0.0.1:8050
 ```
 
 ### 7.6 Open the static HTML dashboard
-Open `dashboard/dashboard.html` in any modern browser. No server required.
+
+```bash
+# macOS
+open dashboard/dashboard.html
+# Windows
+start dashboard/dashboard.html
+# Linux
+xdg-open dashboard/dashboard.html
+```
 
 ---
 
 ## 8. Outputs
 
-- **Interactive Dash app:** `app.py` — `python app.py` → http://127.0.0.1:8050
-- **Static HTML dashboard:** `dashboard/dashboard.html`
-- **Figures:** `figures/SuppFig_*.png` — 300 DPI publication-ready
-- **Tables:** `data/extracted_data.csv`
+| Output | Description |
+|--------|-------------|
+| `data/` | Extracted literature dataset, data dictionary |
+| `figures/` | Forest plots, funnel plots, spatial cluster maps (PNG) |
+| `dashboard/` | Self-contained interactive HTML dashboard |
+| `poster/` | A0 conference poster (HTML, print-ready) |
 
----
+## 8a. Downloadable Artefacts (HTML)
 
-## 8a. Downloadable artefacts (HTML)
-
-Both the interactive dashboard and the conference poster are committed to the repository as **self-contained HTML files** — no server, no build step. They can be:
-
-- **Viewed in browser:** open the rendered preview, or clone the repo and open locally
-- **Downloaded:** right-click → *Save link as*, or use the raw URL
+Both the interactive dashboard and the conference poster are committed as self-contained HTML files — no server, no build step required.
 
 | Artefact | View on GitHub | Live preview | Direct download (raw HTML) |
-|----------|----------------|--------------|------------------------------|
-| Interactive dashboard | [`vitamin_d_ghana_dashboard.html`](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_dashboard.html) | [Open preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_dashboard.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/dashboard/vitamin_d_ghana_dashboard.html) |
-| Conference poster | [`vitamin_d_ghana_poster.html`](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_poster.html) | [Open preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_poster.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/dashboard/vitamin_d_ghana_poster.html) |
+|----------|---------------|--------------|---------------------------|
+| Interactive dashboard | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/dashboard.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/dashboard.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/dashboard/dashboard.html) |
+| Conference poster | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/poster/vitamin_d_ghana_poster.html) |
 
-> **Tip:** the dashboard works fully offline once downloaded. The poster is print-ready at A0 (841 × 1189 mm).
-
+> **Tip:** The dashboard works fully offline once downloaded. The poster is print-ready at A0 (841 × 1189 mm).
 
 ---
 
 ## 9. Reporting Standard
 
-This study follows the **STROBE** (Strengthening the Reporting of Observational Studies in Epidemiology) reporting guideline for observational ecological studies.
+This study follows the **STROBE** (Strengthening the Reporting of Observational Studies in Epidemiology) reporting guideline for observational ecological studies and the **PRISMA** guideline for the systematic literature synthesis component.
 
 ---
 
 ## 10. Ethical Statement
 
-This study used exclusively published, de-identified secondary data from a systematic literature review. No primary data collection from human participants was conducted. Ethical review was therefore not required.
+This study synthesises data from published peer-reviewed literature. No individual participant data were collected or accessed. All analyses use aggregate statistics extracted from published studies. Ethical approval was not required. The study is pre-registered at OSF: [https://doi.org/10.17605/OSF.IO/53GBT](https://doi.org/10.17605/OSF.IO/53GBT).
 
 ---
 
 ## 11. Citation
 
 **APA:**
-Ghanem, V. G. (2025). *Vitamin D Status in Ghana: A Mixed-Methods Narrative Review of Prevalence, Determinants, and Health Implications*. GitHub. https://github.com/valentineghanem-bit/vitamin-d-ghana-review
+Ghanem, V. G. (2025). *Vitamin D Status in Ghana: A Mixed-Methods Narrative Review of Prevalence, Determinants, and Health Implications.* GitHub. https://github.com/valentineghanem-bit/vitamin-d-ghana-review
 
 **BibTeX:**
 ```bibtex
@@ -189,8 +198,7 @@ Ghanem, V. G. (2025). *Vitamin D Status in Ghana: A Mixed-Methods Narrative Revi
   author = {Ghanem, Valentine Golden},
   title  = {Vitamin D Status in Ghana: A Mixed-Methods Narrative Review of Prevalence, Determinants, and Health Implications},
   year   = {2025},
-  url    = {https://github.com/valentineghanem-bit/vitamin-d-ghana-review},
-  doi    = {10.17605/OSF.IO/53GBT}
+  url    = {https://github.com/valentineghanem-bit/vitamin-d-ghana-review}
 }
 ```
 
@@ -200,25 +208,20 @@ A machine-readable citation is provided in `CITATION.cff`.
 
 ## 12. License
 
-Code is released under the **MIT License** — see [LICENSE](LICENSE) for details. Extracted data and figures are released under CC BY 4.0.
+Code is released under the **MIT License** — see [LICENSE](LICENSE) for details.
+Outputs and figures: **CC BY 4.0**.
 
 ---
 
 ## 13. Author & Contact
 
-- **Valentine Golden Ghanem**
-  Ghana COCOBOD Cocoa Clinic, Accra, Ghana
-  Email: [valentineghanem@gmail.com](mailto:valentineghanem@gmail.com)
-  ORCID: [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
+**Valentine Golden Ghanem**
+Ghana COCOBOD Cocoa Clinic, Accra, Ghana
+Email: valentineghanem@gmail.com
+ORCID: [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
 
 ---
 
 ## 14. Acknowledgements
 
-- **Ghana Demographic and Health Survey programme** (ICF International) for survey data access under signed Data Use Agreement.
-- **Ghana Statistical Service** for the 2021 Population and Housing Census and administrative boundary data.
-- **WHO Global Health Observatory** for national-level indicators.
-- **OSF (Open Science Framework)** for pre-registration hosting.
-
----
-
+The author thanks the authors of the 17 primary studies included in this review for their contributions to the Ghanaian vitamin D literature. Meta-analysis used the R metafor package. Spatial analysis relied on esda, libpysal, spdep, and spatialreg. Machine learning used scikit-learn. The T2DM–VDD association documented here has clinical implications for screening practice at the Ghana COCOBOD Cocoa Clinic.
