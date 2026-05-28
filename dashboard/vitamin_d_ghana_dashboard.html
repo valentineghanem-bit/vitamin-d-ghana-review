@@ -532,7 +532,8 @@ function renderAll(data) {
   });
 }
 
-renderAll(DATA);
+// Use requestAnimationFrame so clientWidth is available after layout is computed
+requestAnimationFrame(() => renderAll(DATA));
 
 // Redraw on resize for responsiveness
 let resizeTimer;
