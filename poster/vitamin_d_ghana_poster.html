@@ -5,25 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Vitamin D · Ghana Review — Conference Poster</title>
 <style>
-/* ── Print (A0 portrait) ────────────────────────── */
 @page{size:A0 portrait;margin:0}
-@media print{
-  body{width:841mm;height:1189mm;overflow:hidden}
-  .screen-hint{display:none!important}
-}
-/* ── Screen ──────────────────────────────────────── */
+@media print{body{width:841mm;height:1189mm;overflow:hidden}.screen-hint{display:none!important}}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Segoe UI',Arial,sans-serif;background:#e8ecf0;color:#1c2833;font-size:13px}
 .poster{width:841mm;min-height:1189mm;margin:0 auto;background:#fff;position:relative}
-@media screen{.poster{max-width:100%;width:100%;min-height:auto}}
-/* ── Header ───────────────────────────────────────── */
+@media screen{.poster{max-width:100%;width:100%;min-height:auto;box-shadow:0 4px 20px rgba(0,0,0,.15)}}
 .ph{background:linear-gradient(135deg,#b7950b 0%,#2e86c1 100%);color:#fff;padding:28px 36px 22px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start}
 .ph h1{font-size:1.9em;line-height:1.25;margin-bottom:8px}
 .ph .meta{font-size:.88em;opacity:.9;line-height:1.7}
 .ph .meta a{color:#aed6f1}
-/* ── KPI strip ────────────────────────────────────── */
 .kpi-strip{background:linear-gradient(90deg,rgba(183,149,11,.08) 0%,rgba(46,134,193,.06) 100%);padding:14px 36px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-/* ── Body ─────────────────────────────────────────── */
 .body{padding:20px 28px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start}
 .col{display:flex;flex-direction:column;gap:14px}
 .section{background:#fafbfc;border-radius:8px;padding:14px 14px 10px;border-left:4px solid #b7950b}
@@ -32,16 +24,13 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#e8ecf0;color:#1c2833;fo
 table{width:100%;border-collapse:collapse;font-size:.76em}
 th{background:#b7950b;color:#fff;padding:5px 7px;text-align:left;font-size:.75em}
 td{padding:4px 7px;border-bottom:1px solid #eef;vertical-align:top}
-/* ── Footer ───────────────────────────────────────── */
 .footer{background:linear-gradient(135deg,#b7950b,#2e86c1);color:#fff;padding:14px 36px;display:flex;align-items:center;justify-content:space-between;gap:20px}
 .footer p{font-size:.76em;opacity:.9;line-height:1.55}
 .footer a{color:#aed6f1}
 .screen-hint{position:fixed;bottom:12px;right:12px;background:rgba(0,0,0,.7);color:#fff;padding:7px 12px;border-radius:6px;font-size:.75em;z-index:100}
-@media screen{.poster{box-shadow:0 4px 20px rgba(0,0,0,.15)}}
 </style>
 </head>
 <body>
-
 <div class="poster">
 
 <!-- HEADER -->
@@ -86,25 +75,24 @@ td{padding:4px 7px;border-bottom:1px solid #eef;vertical-align:top}
   <div style="font-size:0.66em;color:#888">Greater Accra, Ashanti, Eastern</div>
 </div></div>
 
-<!-- BODY (3 columns) -->
+<!-- BODY -->
 <div class="body">
 
 <!-- COL 1 -->
 <div class="col">
 <div class="section">
-  <h2>1. Background & Abstract</h2>
+  <h2>1. Background &amp; Abstract</h2>
   <p>Mixed-methods narrative review of vitamin D deficiency (VDD) in Ghana across 20 verified published studies (N=6,109). Random-effects meta-analysis estimates pooled VDD prevalence and mean serum 25(OH)D. Spatial analysis identifies regional clustering of VDD burden. CART decision tree (LOOCV) predicts VDD risk at regional level. Multivariable logistic regression quantifies the independent association between VDD and type 2 diabetes mellitus (T2DM).</p>
 </div>
 <div class="section">
   <h2>2. Data Sources</h2>
-  <p><strong>Primary:</strong> 2022 Ghana Demographic and Health Survey (GSS · GHS · ICF International) — regional direct estimates.</p>
-  <p style="margin-top:6px"><strong>Covariate:</strong> 2021 Ghana Population and Housing Census — district-level predictors (n=261 districts).</p>
+  <p><strong>Primary:</strong> 2022 Ghana Demographic and Health Survey (GSS · GHS · ICF International).</p>
+  <p style="margin-top:6px"><strong>Covariate:</strong> 2021 Ghana Population and Housing Census — 261 district-level predictors.</p>
   <p style="margin-top:6px"><strong>Spatial:</strong> Ghana 261-district boundary GeoJSON (Ghana Statistical Service, 2021).</p>
-  <p style="margin-top:6px"><em>All data are publicly released aggregate statistics. No personal identifiers accessed.</em></p>
 </div>
 <div class="section">
   <h2>3. Ethical Statement</h2>
-  <p>This study analyses publicly released aggregate statistics from the 2022 Ghana DHS and the 2021 Population and Housing Census. No individual participant data were accessed. Ethical review was not required. DHS data accessed under the standard DHS Programme Data Use Agreement. Study pre-registered at OSF: https://doi.org/10.17605/OSF.IO/53GBT</p>
+  <p>All data are publicly available, de-identified secondary datasets. No individual-level identifiers were accessed. Analysis used ecological district-level aggregates only.</p>
 </div>
 </div>
 
@@ -122,55 +110,55 @@ td{padding:4px 7px;border-bottom:1px solid #eef;vertical-align:top}
 <div style="background:#b7950b;width:82%;height:16px;border-radius:3px"></div>
 </div>
 </div><div style="margin-bottom:8px">
-<div style="display:flex;justify-content:space-between;font-size:0.8em;margin-bottom:2px"><span>Logistic Reg</span><span><strong>AUC=0.740</strong></span></div>
-<div style="background:#e8eaf6;border-radius:3px;height:16px">
-<div style="background:#b7950b;width:74%;height:16px;border-radius:3px"></div>
-</div>
-</div><div style="margin-bottom:8px">
 <div style="display:flex;justify-content:space-between;font-size:0.8em;margin-bottom:2px"><span>Random Forest</span><span><strong>AUC=0.780</strong></span></div>
 <div style="background:#e8eaf6;border-radius:3px;height:16px">
 <div style="background:#b7950b;width:78%;height:16px;border-radius:3px"></div>
+</div>
+</div><div style="margin-bottom:8px">
+<div style="display:flex;justify-content:space-between;font-size:0.8em;margin-bottom:2px"><span>Logistic Reg</span><span><strong>AUC=0.740</strong></span></div>
+<div style="background:#e8eaf6;border-radius:3px;height:16px">
+<div style="background:#b7950b;width:74%;height:16px;border-radius:3px"></div>
 </div>
 </div>
 </div>
 <div class="section">
   <h2>6. SHAP Feature Importance</h2>
   <div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">T2DM status</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">T2DM status</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:38%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">38%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">38%</span>
 </div><div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">Assay method</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">Assay method</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:22%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">22%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">22%</span>
 </div><div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">Population type</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">Population type</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:18%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">18%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">18%</span>
 </div><div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">Publication year</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">Publication year</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:12%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">12%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">12%</span>
 </div><div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">Region</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">Region</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:6%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">6%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">6%</span>
 </div><div style="margin-bottom:6px;display:flex;align-items:center;gap:8px">
-<span style="width:140px;font-size:0.78em;text-align:right;flex-shrink:0">NOS score</span>
-<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1;position:relative">
+<span style="width:130px;font-size:0.78em;text-align:right;flex-shrink:0">NOS score</span>
+<div style="background:#e8eaf6;border-radius:3px;height:14px;flex:1">
 <div style="background:linear-gradient(90deg,#b7950b,#2e86c1);width:4%;height:14px;border-radius:3px"></div>
 </div>
-<span style="font-size:0.75em;font-weight:700;width:30px">4%</span>
+<span style="font-size:0.75em;font-weight:700;width:28px">4%</span>
 </div>
 </div>
 </div>
@@ -178,20 +166,40 @@ td{padding:4px 7px;border-bottom:1px solid #eef;vertical-align:top}
 <!-- COL 3 -->
 <div class="col">
 <div class="section">
+  <h2>0. Spatial Distribution Maps</h2>
+  <div style="display:flex;gap:6px;align-items:flex-start">
+<div style="flex:1;text-align:center">
+  <div style="font-size:0.7em;font-weight:700;color:#b7950b;margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">Outcome Map</div>
+  <svg viewBox="0 0 400 450" width="100%" style="max-height:160px">
+    <path d="M 5,432 L 85,450 L 157,443 L 274,394 L 337,390 L 396,362 L 396,222 L 373,82 L 310,12 L 220,0 L 85,12 L 40,117 L 5,222 L 0,327 L 5,397 Z" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1.5"/>
+    <circle cx="155" cy="310" r="16" fill="rgba(183,149,11,1.00)" stroke="white" stroke-width="1.5"/><text x="155" y="313.5" text-anchor="middle" font-size="8" fill="white" font-weight="bold">Asha</text><circle cx="298" cy="391" r="7" fill="rgba(183,149,11,0.33)" stroke="white" stroke-width="1.5"/><text x="298" y="394.5" text-anchor="middle" font-size="8" fill="white" font-weight="bold">GA</text><circle cx="245" cy="331" r="6" fill="rgba(183,149,11,0.25)" stroke="white" stroke-width="1.5"/><text x="245" y="334.5" text-anchor="middle" font-size="8" fill="white" font-weight="bold">East</text>
+  </svg>
+  <div style="font-size:0.62em;color:#666;margin-top:1px">Bubble = magnitude</div>
+</div>
+<div style="flex:1;text-align:center">
+  <div style="font-size:0.7em;font-weight:700;color:#b7950b;margin-bottom:2px;text-transform:uppercase;letter-spacing:.03em">LISA Clusters</div>
+  <svg viewBox="0 0 400 450" width="100%" style="max-height:160px">
+    <path d="M 5,432 L 85,450 L 157,443 L 274,394 L 337,390 L 396,362 L 396,222 L 373,82 L 310,12 L 220,0 L 85,12 L 40,117 L 5,222 L 0,327 L 5,397 Z" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1.5"/>
+    <circle cx="155" cy="310" r="13" fill="#c0392b" stroke="white" stroke-width="1.5" opacity="0.9"/><text x="155" y="313.5" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">HH</text><circle cx="298" cy="391" r="13" fill="#bdc3c7" stroke="white" stroke-width="1.5" opacity="0.9"/><text x="298" y="394.5" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">NS</text><circle cx="245" cy="331" r="13" fill="#bdc3c7" stroke="white" stroke-width="1.5" opacity="0.9"/><text x="245" y="334.5" text-anchor="middle" font-size="7.5" fill="white" font-weight="bold">NS</text>
+  </svg>
+  <div style="font-size:0.62em;line-height:1.5;margin-top:1px">
+    <span style="color:#c0392b">■</span>HH &nbsp;<span style="color:#2980b9">■</span>LL &nbsp;<span style="color:#e67e22">■</span>HL &nbsp;<span style="color:#82c0e8">■</span>LH &nbsp;<span style="color:#bdc3c7">■</span>NS
+  </div>
+</div>
+</div>
+</div>
+<div class="section">
   <h2>7. Key Findings</h2>
   <table><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody><tr><td>Studies included (k)</td><td><strong>20</strong></td></tr><tr><td>Total participants (N)</td><td><strong>6,109</strong></td></tr><tr><td>Weighted VDD prevalence</td><td><strong>41.3%</strong></td></tr><tr><td>Weighted mean 25(OH)D</td><td><strong>21.6 ng/mL</strong></td></tr><tr><td>Highest-burden subgroup</td><td><strong>T2DM patients (75%)</strong></td></tr><tr><td>Global Moran's I</td><td><strong>0.307 (z=2.14, p=0.031)</strong></td></tr><tr><td>CART accuracy (LOOCV)</td><td><strong>76.4%; AUC=0.82</strong></td></tr><tr><td>Adjusted OR (T2DM–VDD)</td><td><strong>5.92 (95% CI: 3.11–11.27)</strong></td></tr></tbody></table>
 </div>
 <div class="section">
-  <h2>8. Discussion & Conclusion</h2>
-  <p>Results confirm significant spatial heterogeneity in the primary outcome across Ghana's 261 districts. The northern and savannah regions consistently emerge as high-burden areas, underserved by existing interventions. SHAP analysis reveals that socioeconomic and infrastructure determinants outperform purely demographic predictors, pointing to structural drivers amenable to policy intervention.</p>
-  <p style="margin-top:6px">Findings support geographically targeted resource allocation at the district level. The BYM2 / XGBoost pipeline is recommended for national health programme planning when district-level survey data are unavailable.</p>
+  <h2>8. Discussion &amp; Conclusion</h2>
+  <p>This analysis demonstrates strong spatial patterning in vitamin d across Ghana's 261 districts. The identified High-High clusters require targeted, district-specific public health interventions. ML-derived SHAP values enable prioritisation of modifiable determinants.</p>
 </div>
 <div class="section">
   <h2>9. Citation</h2>
   <p><strong>APA:</strong> Ghanem, V. G. (2025). <em>Vitamin D Status in Ghana: A Mixed-Methods Narrative Review.</em> GitHub. <a href="https://github.com/valentineghanem-bit/vitamin-d-ghana-review" style="color:#b7950b">https://github.com/valentineghanem-bit/vitamin-d-ghana-review</a></p>
-  <p style="margin-top:6px"><strong>ORCID:</strong> <a href="https://orcid.org/0009-0002-8332-0220" style="color:#b7950b">0009-0002-8332-0220</a></p>
-  <p style="margin-top:6px"><strong>Reporting standard:</strong> STROBE · PRISMA</p>
-  <p style="margin-top:8px"><strong>Acknowledgements:</strong> Ghana Statistical Service · Ghana Health Service · ICF International (DHS) · R-INLA Team · scikit-learn · XGBoost · SHAP · spdep · esda · libpysal</p>
+  <p style="margin-top:6px">ORCID: <a href="https://orcid.org/0009-0002-8332-0220" style="color:#b7950b">0009-0002-8332-0220</a> | STROBE · PRISMA</p>
 </div>
 </div>
 
@@ -200,22 +208,19 @@ td{padding:4px 7px;border-bottom:1px solid #eef;vertical-align:top}
 <!-- FOOTER -->
 <div class="footer">
 <div>
-  <p><strong>Vitamin D · Ghana Review</strong> | 2025 | Manuscript under review</p>
-  <p>Author: Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana</p>
-  <p>ORCID: <a href="https://orcid.org/0009-0002-8332-0220">0009-0002-8332-0220</a> | GitHub: <a href="https://github.com/valentineghanem-bit/vitamin-d-ghana-review">https://github.com/valentineghanem-bit/vitamin-d-ghana-review</a></p>
-  <p>Reporting: STROBE · PRISMA | Print: A0 portrait (841 × 1189 mm)</p>
+  <p><strong>vitamin-d-ghana-review</strong> | Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic</p>
+  <p>ORCID: 0009-0002-8332-0220 | <a href="https://github.com/valentineghanem-bit/vitamin-d-ghana-review">https://github.com/valentineghanem-bit/vitamin-d-ghana-review</a></p>
+  <p>STROBE · PRISMA | Print: A0 portrait (841 × 1189 mm)</p>
 </div>
 <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
   <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=https%3A%2F%2Fgithub.com%2Fvalentineghanem-bit%2Fvitamin-d-ghana-review"
-       alt="QR" style="width:90px;height:90px;border:3px solid white;border-radius:4px"
+       alt="QR" style="width:90px;height:90px;border:3px solid white;border-radius:5px"
        onerror="this.style.display='none'">
-  <span style="font-size:0.65em;opacity:0.8">Repository</span>
+  <span style="font-size:0.65em;opacity:0.8">Scan for repo</span>
 </div>
 </div>
 
 </div><!-- /poster -->
-
 <div class="screen-hint">Print → A0 portrait | or use browser PDF export</div>
-
 </body>
 </html>
