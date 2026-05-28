@@ -144,11 +144,11 @@ python app.py
 
 ```bash
 # macOS
-open dashboard/dashboard.html
+open dashboard/vitamin_d_ghana_dashboard.html
 # Windows
-start dashboard/dashboard.html
+start dashboard/vitamin_d_ghana_dashboard.html
 # Linux
-xdg-open dashboard/dashboard.html
+xdg-open dashboard/vitamin_d_ghana_dashboard.html
 ```
 
 ---
@@ -168,7 +168,7 @@ Both the interactive dashboard and the conference poster are committed as self-c
 
 | Artefact | View on GitHub | Live preview | Direct download (raw HTML) |
 |----------|---------------|--------------|---------------------------|
-| Interactive dashboard | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/dashboard.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/dashboard.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/dashboard/dashboard.html) |
+| Interactive dashboard | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_dashboard.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/dashboard/vitamin_d_ghana_dashboard.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/dashboard/vitamin_d_ghana_dashboard.html) |
 | Conference poster | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/poster/vitamin_d_ghana_poster.html) |
 
 > **Tip:** The dashboard works fully offline once downloaded. The poster is print-ready at A0 (841 × 1189 mm).
