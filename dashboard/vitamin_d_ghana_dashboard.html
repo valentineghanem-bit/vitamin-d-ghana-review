@@ -162,7 +162,7 @@ function hBar(el,labels,vals,colors,tips,xLabel){
   const mL=148,mR=55,mT=8,mB=28,bH=22,gap=5;
   const n=labels.length;
   const h=mT+(bH+gap)*n+mB;
-  const wEl=el.getBoundingClientRect().width||500;
+  const wEl=el.offsetWidth||el.getBoundingClientRect().width||500;
   const w=Math.max(wEl,300);
   const pW=w-mL-mR;
   const mx=Math.max(...vals,0.01);
@@ -182,7 +182,7 @@ function hBar(el,labels,vals,colors,tips,xLabel){
 function vBar(el,labels,vals,colors,yLabel){
   const mL=40,mR=10,mT=12,mB=50,ch=200;
   const n=labels.length;
-  const wEl=el.getBoundingClientRect().width||500;
+  const wEl=el.offsetWidth||el.getBoundingClientRect().width||500;
   const w=Math.max(wEl,300);
   const pW=w-mL-mR;
   const bW=Math.max(12,Math.floor(pW/n)-4);
@@ -209,7 +209,7 @@ el.appendChild(lg);}
 function renderPanelD(){const el=document.getElementById('pD');if(!el)return;el.innerHTML='';
 const mL=100,mR=60,mT=14,mB=18,rowH=17,gap=2;
 const n=FP_D.length,h=mT+(rowH+gap)*n+mB;
-const wEl=el.getBoundingClientRect().width||500;const w=Math.max(wEl,350);const pW=w-mL-mR;
+const wEl=el.offsetWidth||el.getBoundingClientRect().width||500;const w=Math.max(wEl,350);const pW=w-mL-mR;
 const xMn=20,xMx=100,px=v=>mL+(v-xMn)/(xMx-xMn)*pW;
 const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' '+h,style:'display:block'},el);
 [30,40,50,60,70,80].forEach(x=>{svgEl('line',{x1:px(x),y1:mT,x2:px(x),y2:mT+(rowH+gap)*n,stroke:'#eee','stroke-width':'1'},svg);svgEl('text',{x:px(x),y:mT-3,'text-anchor':'middle','font-size':'8','fill':'#ccc'},svg).textContent=x+'%';});
@@ -231,7 +231,7 @@ const cols=vals.map(v=>cs_node_rt((v-mn)/(mx-mn+0.01)));
 const tips=SG_D.map(d=>d.label+': '+d.v+'% (n='+d.n+')');
 hBar(el,labels,vals,cols,tips,'Prevalence (%)');}
 function renderPanelF(){const el=document.getElementById('pF');if(!el)return;el.innerHTML='';
-const wEl=el.getBoundingClientRect().width||400;const w=Math.max(wEl,300);
+const wEl=el.offsetWidth||el.getBoundingClientRect().width||400;const w=Math.max(wEl,300);
 const svg=svgEl('svg',{width:'100%',viewBox:'0 0 '+w+' 200',style:'display:block'},el);
 svgEl('rect',{x:0,y:0,width:w,height:200,fill:'#fefdf7',rx:8},svg);
 svgEl('text',{x:w/2,y:55,'text-anchor':'middle','font-size':'52','font-weight':'900','fill':'#b7950b'},svg).textContent='5.92';
