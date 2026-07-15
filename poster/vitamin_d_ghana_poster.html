@@ -153,7 +153,7 @@ if(EXTRA&&EXTRA.subgroup){
 }
 if(EXTRA&&EXTRA.or){
  document.getElementById('h4').textContent='Comorbidity signal';
- document.getElementById('t4').innerHTML='Two independent Ghanaian case-control estimates link severe maternal VDD with preeclampsia, but certainty remains low because residual confounding and assay heterogeneity cannot be excluded.';
+ document.getElementById('t4').innerHTML='Two independent Ghanaian case-control estimates link severe maternal VDD with preeclampsia. In both chart rows, severe VDD is the exposure and PE is the preeclampsia outcome; certainty remains low because residual confounding and assay heterogeneity cannot be excluded.';
 }else{
  document.getElementById('t4').innerHTML=(C.clusterLabel?CL:'Spatial cluster')+' coding separates high-high, low-low and non-significant strata. In this review, local signals are exploratory and interpreted alongside evidence coverage.';
 }
@@ -200,10 +200,11 @@ if(EXTRA&&EXTRA.subgroup){var sg=EXTRA.subgroup.map(function(r){return{label:r[0
   yAxis:{type:'category',data:cats.map(function(k){return LNAME[k];}),axisLabel:{fontSize:15}},
   series:[{type:'bar',barWidth:'60%',data:cats.map(function(k,i){return{value:means[i],itemStyle:{color:LISA[k]}};}),
    label:{show:true,position:'right',formatter:'{c}'+C.unit,fontSize:14}}]});}
-if(EXTRA&&EXTRA.or){var ors=EXTRA.or,ol=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','');});
- init('cLisa',{grid:{left:205,right:76,top:42,bottom:72,containLabel:true},xAxis:{type:'log',min:1,max:20,logBase:10,name:'Adjusted odds ratio (log scale)',nameLocation:'middle',nameGap:42,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15}},yAxis:{type:'category',data:ol,axisLabel:{fontSize:14,width:190,overflow:'break'}},
+if(EXTRA&&EXTRA.or){var ors=EXTRA.or,ol=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','')+'\nVDD \u2192 PE';});
+ init('cLisa',{grid:{left:270,right:76,top:52,bottom:72,containLabel:true},xAxis:{type:'log',min:1,max:20,logBase:10,name:'Adjusted odds ratio (log scale)',nameLocation:'middle',nameGap:42,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15}},yAxis:{type:'category',data:ol,axisLabel:{fontSize:15,width:260,overflow:'break'}},
   series:[{type:'custom',silent:true,data:ors.map(function(o,i){return[o.lo,o.hi,i];}),renderItem:function(params,api){var a=api.coord([api.value(0),api.value(2)]),b=api.coord([api.value(1),api.value(2)]);return{type:'line',shape:{x1:a[0],y1:a[1],x2:b[0],y2:b[1]},style:{stroke:'#6f3b8f',lineWidth:3}};}},
-   {type:'scatter',symbolSize:22,data:ors.map(function(o,i){return[o.v,i];}),itemStyle:{color:'#6f3b8f'},markLine:{symbol:'none',silent:true,lineStyle:{color:'#7f8fa6',type:'dashed',width:2},label:{show:false},data:[{xAxis:1}]},markArea:{silent:true,itemStyle:{color:'rgba(26,82,118,.06)'},data:[[ {xAxis:1},{xAxis:20} ]]}}]});
+   {type:'scatter',symbolSize:22,data:ors.map(function(o,i){return[o.v,i];}),itemStyle:{color:'#6f3b8f'},markLine:{symbol:'none',silent:true,lineStyle:{color:'#7f8fa6',type:'dashed',width:2},label:{show:false},data:[{xAxis:1}]},markArea:{silent:true,itemStyle:{color:'rgba(26,82,118,.06)'},data:[[ {xAxis:1},{xAxis:20} ]]}}],
+  graphic:[{type:'text',left:245,top:16,style:{text:'Exposure: severe maternal VDD   \u2192   Outcome: preeclampsia (PE)',fill:'#16222e',font:'700 16px Inter, Arial'}}]});
 }else{init('cLisa',mapOpt('lisa'));}
 // same post-layout resize safety net as the dashboard template (see its comment) --
 // init() can run before the print-panel's mm-based height/width has fully settled.

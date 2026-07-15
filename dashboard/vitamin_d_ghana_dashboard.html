@@ -376,11 +376,14 @@ function forestOpt(){var d=EXTRA.forest,pl=EXTRA.forestPooled;
    {type:'line',markLine:{silent:true,symbol:'none',lineStyle:{color:ax(),type:'dotted',width:1.3},
      data:[{xAxis:pl.vddThreshold}],label:{formatter:'VDD <'+pl.vddThreshold,color:ax(),fontSize:9,position:'insideEndBottom'}},data:[]}
   ]};}
+var SHORT_SG={'Pregnant women (preeclamptic)':'Preeclamptic','Pregnant women (normotensive)':'Normotensive',
+ 'T2DM patients':'T2DM','CLD patients':'CLD','RA patients':'RA','Psychiatric patients':'Psychiatric',
+ 'Healthy/non-clinical':'Healthy','Pre-conception women':'Pre-conception'};
 function subgroupOpt(){var d=EXTRA.subgroup.slice().sort(function(a,b){return a[1]-b[1];}),pooled=EXTRA.subgroupPooled;
- return{grid:{left:168,right:54,top:18,bottom:58,containLabel:true},
+ return{grid:{left:92,right:54,top:18,bottom:58,containLabel:true},
   tooltip:{trigger:'item',formatter:function(p){if(p.seriesIndex!==0)return'';var r=d[p.dataIndex];return'<b>'+r[0]+'</b><br/>'+r[1]+'% (95% CI '+r[2]+'–'+r[3]+'%)';}},
   xAxis:{type:'value',min:0,max:100,name:'VDD prevalence (%)',nameLocation:'middle',nameGap:34,axisLabel:{color:ax(),formatter:'{value}%'},nameTextStyle:{color:ax()},splitLine:{lineStyle:{color:gl()}}},
-  yAxis:{type:'category',data:d.map(function(r){return r[0];}),axisLabel:{color:ax(),fontSize:9.5},axisLine:{lineStyle:{color:gl()}}},
+  yAxis:{type:'category',data:d.map(function(r){return SHORT_SG[r[0]]||r[0];}),axisLabel:{color:ax(),fontSize:9.5},axisLine:{lineStyle:{color:gl()}}},
   series:[
    {type:'bar',barWidth:'58%',data:d.map(function(r){return{value:r[1],itemStyle:{color:'#b7950b'}};}),
     label:{show:true,position:'right',formatter:function(p){return p.value+'%';},color:ax(),fontSize:9.5,backgroundColor:'#fff',padding:[1,3],borderRadius:2,offset:[4,0]}},
@@ -401,13 +404,16 @@ function orOpt(){var ors=EXTRA.or;
   series:[
    {type:'custom',renderItem:function(params,api){var idx=params.dataIndex,o=ors[idx];
      var yC=api.coord([1,idx])[1],xLo=api.coord([o.lo,idx])[0],xHi=api.coord([o.hi,idx])[0],xV=api.coord([o.v,idx])[0];
+     var col=OR_COLORS[idx%OR_COLORS.length];
      return{type:'group',children:[
-      {type:'line',shape:{x1:xLo,y1:yC,x2:xHi,y2:yC},style:{stroke:'#6c3483',lineWidth:1.8}},
-      {type:'circle',shape:{cx:xV,cy:yC,r:6},style:{fill:'#6c3483',stroke:'#fff',lineWidth:1.4}}
+      {type:'line',shape:{x1:xLo,y1:yC,x2:xHi,y2:yC},style:{stroke:col,lineWidth:1.8}},
+      {type:'circle',shape:{cx:xV,cy:yC,r:6},style:{fill:col,stroke:'#fff',lineWidth:1.4}},
+      {type:'text',style:{text:'aOR '+o.v,x:xV,y:yC-14,textAlign:'center',fill:col,fontSize:10.5,fontWeight:700}}
      ]};},data:ors},
    {type:'line',markLine:{silent:true,symbol:'none',lineStyle:{color:ax(),type:'dashed',width:1.4},
      data:[{xAxis:1}],label:{show:false}},data:[]}
   ]};}
+var OR_COLORS=['#6c3483','#1a5276'];
 if(EXTRA){document.querySelectorAll('[data-extra]').forEach(function(el){el.style.display='';});}
 var DEFS=[['mapP',function(){return mapOpt('v');}],['mapLisa',function(){return mapOpt('lisa');}],['rank',rankOpt],['scatter',scOpt],['tiers',tiersOpt],['lollipop',lolOpt],['heatmap',heatOpt],['treemap',treeOpt],['box',boxOpt],['bullet',bulletOpt]]
  .concat(EXTRA?[['forest',forestOpt],['subgroup',subgroupOpt],['orplot',orOpt]]:[]);
