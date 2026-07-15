@@ -184,8 +184,11 @@ document.getElementById('capRank').textContent=rkCapped?('Top+bottom '+POSTER_CA
 document.getElementById('h2gradient').textContent='The '+UNIT+' gradient';
 init('cRank',{grid:{left:120,right:60,top:10,bottom:30},xAxis:{type:'value',axisLabel:{fontSize:16}},yAxis:{type:'category',data:rk.map(function(x){return x.short;}),axisLabel:{fontSize:15}},
  series:[{type:'bar',data:rk.map(function(x){return{value:x.v,itemStyle:{color:LISA[x.lisa]}};}),barWidth:'64%',label:{show:true,position:'right',formatter:'{c}'+C.unit,fontSize:14}}]});
-if(EXTRA&&EXTRA.subgroup){var sg=EXTRA.subgroup.map(function(r){return{label:r[0],v:r[1]};}).sort(function(a,b){return a.v-b.v;}),pooled=EXTRA.subgroupPooled;
- init('cScatter',{grid:{left:190,right:58,top:18,bottom:62,containLabel:true},xAxis:{type:'value',min:0,max:100,name:'VDD prevalence (%)',nameLocation:'middle',nameGap:40,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15,formatter:'{value}%'}},yAxis:{type:'category',data:sg.map(function(s){return s.label;}),axisLabel:{fontSize:14,width:180,overflow:'truncate'}},
+var SHORT_SG={'Pregnant women (preeclamptic)':'Preeclamptic','Pregnant women (normotensive)':'Normotensive',
+ 'T2DM patients':'T2DM','CLD patients':'CLD','RA patients':'RA','Psychiatric patients':'Psychiatric',
+ 'Healthy/non-clinical':'Healthy','Pre-conception women':'Pre-conception'};
+if(EXTRA&&EXTRA.subgroup){var sg=EXTRA.subgroup.map(function(r){return{label:SHORT_SG[r[0]]||r[0],v:r[1]};}).sort(function(a,b){return a.v-b.v;}),pooled=EXTRA.subgroupPooled;
+ init('cScatter',{grid:{left:110,right:58,top:18,bottom:62,containLabel:true},xAxis:{type:'value',min:0,max:100,name:'VDD prevalence (%)',nameLocation:'middle',nameGap:40,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15,formatter:'{value}%'}},yAxis:{type:'category',data:sg.map(function(s){return s.label;}),axisLabel:{fontSize:14,width:180,overflow:'truncate'}},
   series:[{type:'bar',barWidth:'55%',data:sg.map(function(s){return{value:s.v,itemStyle:{color:cs(s.v/100)}};}),label:{show:true,position:'right',formatter:'{c}%',fontSize:14},markLine:{symbol:'none',silent:true,lineStyle:{color:'#d73027',type:'dashed',width:2},label:{show:false},data:[{xAxis:pooled}]}}]});
 }else if(C.hasX){var xs=R.filter(function(d){return d.x!=null;}),X=xs.map(function(d){return d.x;}),Y=xs.map(function(d){return d.v;}),n=X.length,mx=X.reduce(function(a,b){return a+b;})/n,my=Y.reduce(function(a,b){return a+b;})/n,nu=0,de=0;for(var i=0;i<n;i++){nu+=(X[i]-mx)*(Y[i]-my);de+=(X[i]-mx)*(X[i]-mx);}var b=de?nu/de:0,a0=my-b*mx,xr=rng('x');
  init('cScatter',{grid:{left:70,right:30,top:20,bottom:60},xAxis:{name:C.cov,nameLocation:'middle',nameGap:42,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15}},yAxis:{name:C.outcome,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15}},
@@ -200,10 +203,13 @@ if(EXTRA&&EXTRA.subgroup){var sg=EXTRA.subgroup.map(function(r){return{label:r[0
   yAxis:{type:'category',data:cats.map(function(k){return LNAME[k];}),axisLabel:{fontSize:15}},
   series:[{type:'bar',barWidth:'60%',data:cats.map(function(k,i){return{value:means[i],itemStyle:{color:LISA[k]}};}),
    label:{show:true,position:'right',formatter:'{c}'+C.unit,fontSize:14}}]});}
-if(EXTRA&&EXTRA.or){var ors=EXTRA.or,ol=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','')+'\nVDD \u2192 PE';});
+if(EXTRA&&EXTRA.or){var ors=EXTRA.or,ol=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','')+'\nVDD \u2192 PE';}),OR_COLORS=['#6c3483','#1a5276'];
  init('cLisa',{grid:{left:270,right:76,top:52,bottom:72,containLabel:true},xAxis:{type:'log',min:1,max:20,logBase:10,name:'Adjusted odds ratio (log scale)',nameLocation:'middle',nameGap:42,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15}},yAxis:{type:'category',data:ol,axisLabel:{fontSize:15,width:260,overflow:'break'}},
-  series:[{type:'custom',silent:true,data:ors.map(function(o,i){return[o.lo,o.hi,i];}),renderItem:function(params,api){var a=api.coord([api.value(0),api.value(2)]),b=api.coord([api.value(1),api.value(2)]);return{type:'line',shape:{x1:a[0],y1:a[1],x2:b[0],y2:b[1]},style:{stroke:'#6f3b8f',lineWidth:3}};}},
-   {type:'scatter',symbolSize:22,data:ors.map(function(o,i){return[o.v,i];}),itemStyle:{color:'#6f3b8f'},markLine:{symbol:'none',silent:true,lineStyle:{color:'#7f8fa6',type:'dashed',width:2},label:{show:false},data:[{xAxis:1}]},markArea:{silent:true,itemStyle:{color:'rgba(26,82,118,.06)'},data:[[ {xAxis:1},{xAxis:20} ]]}}],
+  series:[{type:'custom',silent:true,data:ors.map(function(o,i){return[o.lo,o.hi,i];}),renderItem:function(params,api){var idx=api.value(2),a=api.coord([api.value(0),idx]),b=api.coord([api.value(1),idx]);return{type:'line',shape:{x1:a[0],y1:a[1],x2:b[0],y2:b[1]},style:{stroke:OR_COLORS[idx%2],lineWidth:3}};}},
+   {type:'custom',silent:true,data:ors.map(function(o,i){return[o.v,i];}),renderItem:function(params,api){var idx=api.value(1),p=api.coord([api.value(0),idx]);return{type:'group',children:[
+     {type:'circle',shape:{cx:p[0],cy:p[1],r:11},style:{fill:OR_COLORS[idx%2],stroke:'#fff',lineWidth:2}},
+     {type:'text',style:{text:'aOR '+ors[idx].v,x:p[0],y:p[1]-20,textAlign:'center',fill:OR_COLORS[idx%2],font:'700 15px Inter, Arial'}}
+    ]};},markLine:{symbol:'none',silent:true,lineStyle:{color:'#7f8fa6',type:'dashed',width:2},label:{show:false},data:[{xAxis:1}]},markArea:{silent:true,itemStyle:{color:'rgba(26,82,118,.06)'},data:[[ {xAxis:1},{xAxis:20} ]]}}],
   graphic:[{type:'text',left:245,top:16,style:{text:'Exposure: severe maternal VDD   \u2192   Outcome: preeclampsia (PE)',fill:'#16222e',font:'700 16px Inter, Arial'}}]});
 }else{init('cLisa',mapOpt('lisa'));}
 // same post-layout resize safety net as the dashboard template (see its comment) --
