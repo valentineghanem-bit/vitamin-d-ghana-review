@@ -18,8 +18,10 @@ POOLED_MEAN_CI = (15.8, 21.0)
 I2 = 97.8
 MORANS_I = 0.307
 MORANS_P = 0.031
-AOR_PREECLAMPSIA = 5.9
-AOR_CI = (2.14, 16.40)
+AOR_PREECLAMPSIA_VOLTA = 5.9
+AOR_VOLTA_CI = (2.14, 16.40)
+AOR_PREECLAMPSIA_ASHANTI = 3.31
+AOR_ASHANTI_CI = (1.58, 6.92)
 CART_ACCURACY = 0.588
 CART_AUC = 0.357
 N_STUDIES = 17
@@ -88,9 +90,11 @@ class TestCanonicalValueInternalConsistency:
         lo, hi = POOLED_MEAN_CI
         assert lo <= POOLED_MEAN_25OHD <= hi
 
-    def test_aor_within_own_ci(self):
-        lo, hi = AOR_CI
-        assert lo <= AOR_PREECLAMPSIA <= hi
+    def test_preeclampsia_aors_within_own_cis(self):
+        lo, hi = AOR_VOLTA_CI
+        assert lo <= AOR_PREECLAMPSIA_VOLTA <= hi
+        lo, hi = AOR_ASHANTI_CI
+        assert lo <= AOR_PREECLAMPSIA_ASHANTI <= hi
 
     def test_heterogeneity_substantial(self):
         assert I2 > 75.0
