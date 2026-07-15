@@ -140,7 +140,7 @@ input[type=range]{width:155px;accent-color:var(--primary);cursor:pointer}
  <div class="card span5"><h3>Focus region vs national mean</h3><p class="cap">Select a region above to compare.</p><div class="chart" id="bullet"></div></div>
  <div class="card span7" id="forestCard" data-extra="1" style="display:none"><h3>Study-level forest plot — mean serum 25(OH)D</h3><p class="cap">16 studies reporting baseline mean 25(OH)D ± 95% CI; Ayamah 2025 reported VDD prevalence only, not a baseline mean, and is excluded here. Shaded band = pooled 95% CI; dashed red line = pooled mean; dotted line = VDD threshold (&lt;20 ng/mL).</p><div class="chart" id="forest" style="height:420px"></div></div>
  <div class="card span5" id="subgroupCard" data-extra="1" style="display:none"><h3>VDD prevalence by population subgroup</h3><p class="cap">Weighted prevalence ± 95% CI per subgroup; dashed line = overall pooled prevalence.</p><div class="chart" id="subgroup" style="height:480px"></div></div>
- <div class="card span12" id="orCard" data-extra="1" style="display:none"><h3>Comorbidity association — severe VDD and preeclampsia</h3><p class="cap" id="orCap">Adjusted odds ratios with 95% CI. Reference line at OR=1 (no association); log x-axis.</p><div class="chart" id="orplot" style="height:320px"></div></div>
+ <div class="card span12" id="orCard" data-extra="1" style="display:none"><h3>Comorbidity association — severe VDD exposure and preeclampsia outcome</h3><p class="cap" id="orCap">Each row is a Ghanaian case-control estimate. Exposure = severe maternal vitamin D deficiency (VDD); outcome = preeclampsia (PE). Reference line at OR=1 (no association); log x-axis.</p><div class="chart" id="orplot" style="height:340px"></div></div>
 </div>
 <div class="foot" id="foot"></div>
 </div>
@@ -394,13 +394,14 @@ function subgroupOpt(){var d=EXTRA.subgroup.slice().sort(function(a,b){return a[
      data:[{xAxis:pooled}],label:{show:false}},data:[]}
   ]};}
 function orOpt(){var ors=EXTRA.or;
- if(document.getElementById('orCap')&&EXTRA.orNote)document.getElementById('orCap').textContent=EXTRA.orNote+' Reference line at OR=1 (no association); log x-axis.';
- var ylabs=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','');});
- return{grid:{left:210,right:70,top:24,bottom:62,containLabel:true},
-  tooltip:{trigger:'item',formatter:function(p){var o=ors[p.dataIndex];return'<b>'+o.label+'</b><br/>aOR '+o.v+' (95% CI '+o.lo+'–'+o.hi+')';}},
+ if(document.getElementById('orCap')&&EXTRA.orNote)document.getElementById('orCap').textContent='Each row is a Ghanaian case-control estimate. Exposure = severe maternal VDD; outcome = preeclampsia (PE). '+EXTRA.orNote+' Reference line at OR=1 (no association); log x-axis.';
+ var ylabs=ors.map(function(o){return o.label.replace('Severe maternal VDD to preeclampsia (','').replace(')','')+'\nVDD exposure | PE outcome';});
+ return{grid:{left:260,right:70,top:46,bottom:64,containLabel:true},
+  graphic:[{type:'text',left:265,top:12,style:{text:'Exposure: severe maternal VDD   |   Outcome: preeclampsia (PE)',fill:ax(),font:'700 13px Inter, Arial'}}],
+  tooltip:{trigger:'item',formatter:function(p){var o=ors[p.dataIndex];return'<b>'+o.label+'</b><br/>Exposure: severe maternal VDD<br/>Outcome: preeclampsia (PE)<br/>aOR '+o.v+' (95% CI '+o.lo+'–'+o.hi+')';}},
   xAxis:{type:'log',min:1,max:20,name:'Adjusted odds ratio (log scale)',nameLocation:'middle',nameGap:36,axisLabel:{color:ax()},nameTextStyle:{color:ax()},splitLine:{lineStyle:{color:gl()}},
    axisLine:{lineStyle:{color:gl()}}},
-  yAxis:{type:'category',data:ylabs,axisLabel:{color:ax(),fontSize:10,width:190,overflow:'break'},axisLine:{lineStyle:{color:gl()}}},
+  yAxis:{type:'category',data:ylabs,axisLabel:{color:ax(),fontSize:10.5,width:245,overflow:'break'},axisLine:{lineStyle:{color:gl()}}},
   series:[
    {type:'custom',renderItem:function(params,api){var idx=params.dataIndex,o=ors[idx];
      var yC=api.coord([1,idx])[1],xLo=api.coord([o.lo,idx])[0],xHi=api.coord([o.hi,idx])[0],xV=api.coord([o.v,idx])[0];
