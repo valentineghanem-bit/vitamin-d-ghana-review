@@ -66,6 +66,11 @@ body{margin:0;background:#7f8c9b;font-family:'Inter',system-ui,Segoe UI,Roboto,A
 .bn{padding:13mm 10mm;border-right:1px solid var(--line);text-align:center}.bn:last-child{border-right:0}
 .bn .v{font-size:22mm;font-weight:900;color:var(--primary);line-height:1;letter-spacing:-.02em}
 .bn .l{font-size:6.2mm;font-weight:700;margin-top:4mm}.bn .s{font-size:5mm;color:var(--muted);margin-top:2mm}
+.story{padding:10mm 30mm;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:6mm;align-items:stretch}
+.story .node{border:1px solid var(--line);border-radius:5mm;padding:7mm 8mm;background:linear-gradient(180deg,#fff,#f7fafc);min-height:44mm}
+.story .ico{width:13mm;height:13mm;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:var(--primary);color:#fff;font-weight:900;font-size:7mm;margin-bottom:3mm}
+.story .ttl{font-size:6.2mm;font-weight:900;color:var(--ink);line-height:1.15}.story .txt{font-size:4.8mm;color:var(--muted);line-height:1.35;margin-top:2mm}
+.story .arr{display:flex;align-items:center;color:var(--gold);font-size:12mm;font-weight:900}
 .body{flex:1;padding:18mm 30mm 8mm;display:grid;grid-template-columns:1fr 1fr;gap:16mm}
 .col{display:flex;flex-direction:column;gap:14mm}
 .block h2{font-size:9mm;font-weight:900;color:var(--primary);margin:0 0 2mm}
@@ -90,6 +95,7 @@ body{margin:0;background:#7f8c9b;font-family:'Inter',system-ui,Segoe UI,Roboto,A
 </div>
 <div class="hook" id="pHook"></div>
 <div class="bignums" id="pBig"></div>
+<div class="story" id="pStory"></div>
 <div class="body">
  <div class="col">
   <div class="block"><h2><span class="n">1</span>Where the burden concentrates</h2><p id="t1"></p>
@@ -153,6 +159,12 @@ if(EXTRA&&EXTRA.or){
 }
 var big=KPIS.slice(0,4);
 document.getElementById('pBig').innerHTML=big.map(function(k){return'<div class="bn"><div class="v">'+k.v+'</div><div class="l">'+k.l+'</div><div class="s">'+k.s+'</div></div>';}).join('');
+document.getElementById('pStory').innerHTML=[
+ ['01','Evidence search','Four databases, PRISMA screening and body-verified extraction.'],
+ ['02','Included evidence','17 Ghanaian studies, N=4,318, with assay and population heterogeneity retained.'],
+ ['03','Synthesis signal','Pooled VDD prevalence 58.3%; mean 25(OH)D 18.4 ng/mL.'],
+ ['04','Submission message','High burden, sparse regional coverage and low-certainty comorbidity signals.']
+].map(function(s,i){return'<div class="node"><div class="ico">'+s[0]+'</div><div class="ttl">'+s[1]+'</div><div class="txt">'+s[2]+'</div></div>'+(i<3?'<div class="arr">&#8594;</div>':'');}).join('');
 document.getElementById('pFoot').innerHTML='<b>Data:</b> '+(C.data||'Ghana district-level surveillance')+' · <b>Methods:</b> '+(C.methods||'Spatial autocorrelation / local-cluster statistics, interpreted with multiplicity control where prespecified · STROBE/RECORD')+'<br/><b>Repo:</b> github.com/valentineghanem-bit/'+C.repo;
 document.getElementById('pQR').src=P.QR||''; // inlined at build time -- no external CDN/API call at render time (offline requirement)
 echarts.registerMap('ghana',GEO);

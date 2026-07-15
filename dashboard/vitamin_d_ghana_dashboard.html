@@ -85,6 +85,10 @@ input[type=range]{width:155px;accent-color:var(--primary);cursor:pointer}
 .kpi{background:var(--panel);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);border:1px solid var(--line);position:relative;overflow:hidden}
 .kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--primary)}
 .kpi .v{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}.kpi .l{font-size:.72rem;font-weight:700;margin-top:2px}.kpi .s{font-size:.66rem;color:var(--muted);margin-top:3px}
+.story{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 14px}
+.story .node{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:14px;padding:12px 14px;position:relative;overflow:hidden}
+.story .node::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--primary),var(--primary2))}
+.story .step{font-size:.64rem;font-weight:900;color:var(--primary);text-transform:uppercase;letter-spacing:.06em}.story .ttl{font-size:.82rem;font-weight:900;margin-top:4px}.story .txt{font-size:.68rem;color:var(--muted);line-height:1.35;margin-top:3px}
 .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:13px}
 .card{background:var(--panel);border-radius:14px;box-shadow:var(--shadow);border:1px solid var(--line);padding:13px 15px 8px}
 .card h3{margin:0 0 1px;font-size:.84rem;font-weight:800}.card .cap{font-size:.68rem;color:var(--muted);margin:0 0 5px}
@@ -122,6 +126,7 @@ input[type=range]{width:155px;accent-color:var(--primary);cursor:pointer}
 </div>
 <div class="summary" id="summary"></div>
 <div class="kpis" id="kpis"></div>
+<div class="story" id="story"></div>
 <div class="grid">
  <div class="card span6 mapcard"><h3 id="mapTitle"></h3><p class="cap" id="mapCap">Districts coloured by value · scroll/drag to zoom &amp; pan · click to filter.</p><div class="zoomctl"><button type="button" id="zPlusP" title="Zoom in">+</button><button type="button" id="zMinusP" title="Zoom out">−</button><button type="button" id="zResetP" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapP"></div><div class="maplegend" id="legP"></div></div>
  <div class="card span6 mapcard"><h3 id="clusterMapTitle">Spatial cluster typology</h3><p class="cap" id="clusterMapCap">Spatial cluster classes · scroll/drag to zoom &amp; pan · click to filter.</p><div class="zoomctl"><button type="button" id="zPlusL" title="Zoom in">+</button><button type="button" id="zMinusL" title="Zoom out">−</button><button type="button" id="zResetL" title="Reset" style="font-size:12px">⟲</button></div><div class="chart map" id="mapLisa"></div><div class="maplegend" id="legLisa"></div></div>
@@ -186,6 +191,12 @@ document.getElementById('tiersCap').textContent=UNITS_CAP+' per '+CL+'.';
 document.getElementById('boxCap').textContent='Distribution of the outcome across '+UNITS+', grouped by '+CL+'.';
 document.getElementById('mapCap').textContent=UNITS_CAP+' coloured by value · scroll/drag to zoom & pan · click to filter.';
 document.getElementById('kpis').innerHTML=KPIS.map(function(k){return'<div class="kpi"><div class="v">'+k.v+'</div><div class="l">'+k.l+'</div><div class="s">'+k.s+'</div></div>';}).join('');
+document.getElementById('story').innerHTML=[
+ ['Evidence search','Four databases, PRISMA screening, body-verified extraction.'],
+ ['Included evidence','17 Ghanaian studies, N=4,318, with assay heterogeneity retained.'],
+ ['Synthesis signal','Pooled VDD 58.3%; mean 25(OH)D 18.4 ng/mL.'],
+ ['Decision message','High burden, sparse coverage, low-certainty comorbidity signals.']
+].map(function(s,i){return'<div class="node"><div class="step">Step '+(i+1)+'</div><div class="ttl">'+s[0]+'</div><div class="txt">'+s[1]+'</div></div>';}).join('');
 // metric segmented
 document.getElementById('segMetric').innerHTML=METRICS.map(function(m,i){return'<button data-m="'+m.key+'" class="'+(i===0?'on':'')+'">'+m.label+'</button>';}).join('');
 // threshold slider setup
