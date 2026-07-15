@@ -1,0 +1,14 @@
+{
+  "n_studies": 17,
+  "high_vdd_threshold_pct": 70,
+  "accuracy": 0.588,
+  "auc": 0.357,
+  "features": [
+    "population_numeric",
+    "region_numeric",
+    "assay_numeric",
+    "quality_score",
+    "sample_size"
+  ],
+  "source": "data/cart_feature_matrix.csv derived from data/extracted_data.csv"
+}

@@ -1,143 +1,98 @@
-"""
-decision_tree.py — Vitamin D Ghana Scoping Review
-Author: Valentine Golden Ghanem | ORCID: 0009-0002-8332-0220
-Date: April 2026
-Description: CART decision tree (max_depth=3, min_samples_split=5) to predict
- high VDD burden (>70%) using study-level features. LOOCV evaluation.
-Inputs: data/extracted_data.csv
-Outputs: figures/SuppFig_S1_DecisionTree.png
-"""
+"""Build the reproducible CART input matrix for the Vitamin D Ghana review.
 
-import os
-import warnings
-warnings.filterwarnings('ignore')
+This derives the study-level feature matrix from data/extracted_data.csv, writes
+data/cart_feature_matrix.csv, and runs the exploratory CART model reported in
+the manuscript. It does not use abandoned individual-level simulations.
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
 
 import pandas as pd
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+from sklearn.metrics import accuracy_score, roc_auc_score
 from sklearn.model_selection import LeaveOneOut, cross_val_predict
-from sklearn.metrics import (accuracy_score, roc_auc_score, confusion_matrix,
- classification_report)
-import matplotlib.pyplot as plt
-import logging
+from sklearn.tree import DecisionTreeClassifier
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
-logger = logging.getLogger(__name__)
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data" / "extracted_data.csv"
+MATRIX = ROOT / "data" / "cart_feature_matrix.csv"
+RESULTS = ROOT / "outputs" / "data" / "cart_results.json"
 
-SEED = 42
-MAX_DEPTH = 3
-MIN_SAMPLES_SPLIT = 5
-HIGH_VDD_THRESHOLD = 70.0 # percent
-
-FEATURE_COLS = [
- 'Population_Category_numeric', 'NOS_Score', 'Publication_Year',
- 'Mean_Age', 'Prop_Female', 'Region_numeric', 'Assay_numeric'
-]
-FEATURE_LABELS = [
- 'Population Category', 'NOS Score', 'Publication Year',
- 'Mean Age', '% Female', 'Region', 'Assay Method'
-]
-
-
-def load_data(csv_path: str) -> tuple:
- """Load extracted data and prepare features / target."""
- dat = pd.read_csv(csv_path)
- X = dat[FEATURE_COLS].fillna(dat[FEATURE_COLS].median())
- y = dat['High_VDD'].astype(int)
- logger.info(f"Loaded {len(dat)} studies. High VDD: {y.sum()}/{len(y)}")
- return X, y, dat
-
-
-def fit_and_evaluate(X: pd.DataFrame, y: pd.Series) -> dict:
- """Fit CART model and evaluate with Leave-One-Out Cross-Validation."""
- clf = DecisionTreeClassifier(
- max_depth=MAX_DEPTH,
- min_samples_split=MIN_SAMPLES_SPLIT,
- random_state=SEED,
- criterion='gini',
- class_weight='balanced'
- )
- # Full-data fit for feature importances and tree structure
- clf.fit(X, y)
-
- # LOOCV for unbiased performance estimates
- loo = LeaveOneOut()
- y_pred = cross_val_predict(clf, X, y, cv=loo)
- y_prob = cross_val_predict(clf, X, y, cv=loo, method='predict_proba')[:, 1]
-
- cm = confusion_matrix(y, y_pred)
- tn, fp, fn, tp = cm.ravel()
- acc = accuracy_score(y, y_pred)
- auc = roc_auc_score(y, y_prob)
- sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0
- specificity = tn / (tn + fp) if (tn + fp) > 0 else 0
- ppv = tp / (tp + fp) if (tp + fp) > 0 else 0
- npv = tn / (tn + fn) if (tn + fn) > 0 else 0
-
- importances = pd.Series(clf.feature_importances_, index=FEATURE_LABELS)
-
- metrics = {
- 'accuracy': round(acc, 3),
- 'sensitivity': round(sensitivity, 3),
- 'specificity': round(specificity, 3),
- 'ppv': round(ppv, 3),
- 'npv': round(npv, 3),
- 'auc_roc': round(auc, 3),
- 'confusion_matrix': cm.tolist(),
- 'feature_importances': importances.sort_values(ascending=False).round(3).to_dict(),
- }
-
- logger.info(f"LOOCV Accuracy={acc:.3f} Sensitivity={sensitivity:.3f} "
- f"Specificity={specificity:.3f} AUC={auc:.3f}")
- return metrics, clf
+POP_MAP = {
+    "Healthy adults": 1,
+    "Healthy donors": 1,
+    "Pre-conception": 2,
+    "Pregnant women": 3,
+    "Pregnant (1st trimester)": 3,
+    "T2DM": 4,
+    "T2DM women": 4,
+    "BPH patients": 5,
+    "Psychiatric": 6,
+    "RA patients": 7,
+    "CLD patients": 8,
+}
+REGION_MAP = {
+    "Ashanti": 1,
+    "Greater Accra": 2,
+    "Eastern": 3,
+    "Western North": 4,
+    "Volta": 5,
+    "Multi-region": 6,
+}
+ASSAY_MAP = {"ELISA": 1, "LC-MS/MS": 2}
 
 
-def plot_decision_tree(clf: DecisionTreeClassifier, metrics: dict,
- out_path: str = 'figures/SuppFig_S1_DecisionTree.png') -> None:
- """Visualise CART tree with performance annotation."""
- os.makedirs(os.path.dirname(out_path), exist_ok=True)
- fig, ax = plt.subplots(figsize=(16, 8))
- plot_tree(clf, feature_names=FEATURE_LABELS,
- class_names=['Low/Mod VDD', 'High VDD'],
- filled=True, rounded=True, fontsize=10, ax=ax,
- impurity=True, precision=3)
-
- perf_text = (
- f"LOOCV Performance (n=17)\n"
- f"Accuracy: {metrics['accuracy']*100:.1f}%\n"
- f"Sensitivity: {metrics['sensitivity']*100:.1f}%\n"
- f"Specificity: {metrics['specificity']*100:.1f}%\n"
- f"AUC-ROC: {metrics['auc_roc']:.2f}"
- )
- ax.text(0.02, 0.02, perf_text, transform=ax.transAxes, fontsize=11,
- verticalalignment='bottom',
- bbox=dict(boxstyle='round,pad=0.5', facecolor='lightyellow',
- edgecolor='#C9A84C', alpha=0.9))
-
- ax.set_title(
- f"CART Decision Tree — Predictors of High VDD Burden (>{HIGH_VDD_THRESHOLD:.0f}%)\n"
- f"max_depth={MAX_DEPTH}, min_samples_split={MIN_SAMPLES_SPLIT}, "
- f"Leave-One-Out Cross-Validation, random_state={SEED}",
- fontsize=13, fontweight='semibold', pad=15
- )
- plt.tight_layout()
- plt.savefig(out_path, dpi=300, bbox_inches='tight')
- plt.close()
- logger.info(f"Saved: {out_path}")
+def quality_score(value: str) -> int:
+    text = str(value)
+    if text[:1].isdigit():
+        return int(text[:1])
+    if "Some concerns" in text:
+        return 6
+    return 6
 
 
-if __name__ == '__main__':
- import argparse, json
- parser = argparse.ArgumentParser(description='CART decision tree for VDD prediction')
- parser.add_argument('--csv', default='data/extracted_data.csv')
- parser.add_argument('--out', default='figures/SuppFig_S1_DecisionTree.png')
- args = parser.parse_args()
+def build_matrix() -> pd.DataFrame:
+    df = pd.read_csv(DATA)
+    matrix = pd.DataFrame(
+        {
+            "ref_id": df["ref_id"],
+            "first_author_year": df["first_author_year"],
+            "population_numeric": df["population"].map(POP_MAP).fillna(0).astype(int),
+            "region_numeric": df["region"].map(REGION_MAP).fillna(0).astype(int),
+            "assay_numeric": df["assay_method"].map(ASSAY_MAP).fillna(0).astype(int),
+            "quality_score": df["quality_assessment"].map(quality_score),
+            "sample_size": df["n"],
+            "vdd_prevalence_pct": df["vdd_prevalence_pct"],
+            "high_vdd": (df["vdd_prevalence_pct"] > 70).astype(int),
+        }
+    )
+    MATRIX.parent.mkdir(parents=True, exist_ok=True)
+    matrix.to_csv(MATRIX, index=False)
+    return matrix
 
- X, y, dat = load_data(args.csv)
- metrics, clf = fit_and_evaluate(X, y)
- plot_decision_tree(clf, metrics, args.out)
 
- print("\n=== DECISION TREE RESULTS ===")
- print(json.dumps(metrics, indent=2))
- print("\nTree structure:")
- print(export_text(clf, feature_names=FEATURE_LABELS))
+def run_cart(matrix: pd.DataFrame) -> dict:
+    features = ["population_numeric", "region_numeric", "assay_numeric", "quality_score", "sample_size"]
+    x = matrix[features]
+    y = matrix["high_vdd"]
+    clf = DecisionTreeClassifier(max_depth=3, min_samples_split=5, random_state=42, class_weight="balanced")
+    loo = LeaveOneOut()
+    pred = cross_val_predict(clf, x, y, cv=loo)
+    prob = cross_val_predict(clf, x, y, cv=loo, method="predict_proba")[:, 1]
+    clf.fit(x, y)
+    result = {
+        "n_studies": int(len(matrix)),
+        "high_vdd_threshold_pct": 70,
+        "accuracy": round(float(accuracy_score(y, pred)), 3),
+        "auc": round(float(roc_auc_score(y, prob)), 3),
+        "features": features,
+        "source": "data/cart_feature_matrix.csv derived from data/extracted_data.csv",
+    }
+    RESULTS.parent.mkdir(parents=True, exist_ok=True)
+    RESULTS.write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return result
+
+
+if __name__ == "__main__":
+    print(json.dumps(run_cart(build_matrix()), indent=2))

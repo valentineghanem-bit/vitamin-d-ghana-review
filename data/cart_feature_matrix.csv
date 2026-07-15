@@ -1,0 +1,18 @@
+ref_id,first_author_year,population_numeric,region_numeric,assay_numeric,quality_score,sample_size,vdd_prevalence_pct,high_vdd
+1,Durazo-Arvizu 2014,1,1,2,9,500,4.8,0
+2,Kramer 2016,1,1,2,8,490,5.0,0
+3,Chiang 2017,1,1,2,9,479,5.5,0
+4,Fondjo 2017,4,1,1,8,218,92.4,1
+5,Fondjo 2021,3,5,1,9,180,81.7,1
+6,Asare 2017,5,2,1,4,60,48.3,0
+7,Sakyi 2021,1,6,1,9,500,43.6,0
+8,Antwi 2024,1,6,1,9,500,43.6,0
+9,Fondjo 2018,4,1,1,8,192,60.9,0
+10,Arhin-Aidoo 2025,4,4,1,9,200,28.0,0
+11,Gernand 2019,2,3,2,6,98,5.1,0
+12,Pobee 2020,2,3,2,6,95,10.3,0
+13,Fondjo 2024,3,1,1,8,162,54.7,0
+14,Fondjo 2022,6,1,1,8,300,39.5,0
+15,Sakyi 2022,7,1,1,8,138,58.5,0
+16,Dzudzor 2023,8,2,1,7,80,62.5,0
+17,Ayamah 2025,3,1,1,6,126,88.1,1

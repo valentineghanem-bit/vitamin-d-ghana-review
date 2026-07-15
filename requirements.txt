@@ -1,35 +1,33 @@
-# requirements.txt — Vitamin D Ghana Review
+# requirements.txt -- Vitamin D Ghana Review
 # Install: pip install -r requirements.txt
-# Python >= 3.11 required
+# Python >=3.11,<3.13 recommended; CI uses Python 3.12.
 
-# Geospatial & spatial statistics
-geopandas==1.0.1
-libpysal==4.12.0
-esda==2.7.0
-splot==1.1.5.post1
-Shapely==2.0.6
-pyproj==3.6.1
-fiona==1.9.6
-rtree==1.3.0
+# Geospatial and spatial statistics
+geopandas>=1.0,<1.1
+libpysal>=4.11,<4.12
+esda>=2.7,<2.8
+splot>=1.1,<1.2
+Shapely>=2.0,<2.1
+pyproj>=3.6,<3.7
+fiona>=1.9,<2.0
+rtree>=1.3,<1.4
 
 # Machine learning
-scikit-learn==1.5.2
+scikit-learn>=1.5,<1.6
 
 # Data handling
-pandas==2.2.3
-numpy==1.26.4
-openpyxl==3.1.5
+pandas>=2.2,<2.3
+numpy>=1.26,<2.0
+openpyxl>=3.1,<3.2
 
 # Visualisation
-matplotlib==3.9.2
-seaborn==0.13.2
-plotly==5.24.0
-dash==2.18.0
-dash-bootstrap-components==1.6.0
+matplotlib>=3.9,<3.11
+seaborn>=0.13,<0.14
+plotly>=5.24,<6.0
 
 # Statistics
-scipy==1.14.0
-statsmodels==0.14.4
+scipy>=1.14,<1.15
+statsmodels>=0.14,<0.15
 
 # Testing
-pytest==8.3.3
+pytest>=8.3,<8.4
