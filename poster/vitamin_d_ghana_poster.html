@@ -137,7 +137,7 @@ document.getElementById('cap1').textContent=UNIT_CAP+' '+C.outcome+', coloured b
 document.getElementById('t2').innerHTML=(C.spatialConfirmed===false)?
  ('Published region-level evidence is <span class="hl">sparse and uneven</span>, not a clean geographic gradient: the '+UNITS+' with data are scattered across the map rather than tracing a consistent north–south pattern.'):
  ('A clear <span class="hl">north–south gradient</span> separates the most- and least-affected '+UNITS+', the signature of structural inequity.');
-if(EXTRA&&EXTRA.subgroups){
+if(EXTRA&&EXTRA.subgroup){
  document.getElementById('h3').textContent='Subgroup burden';
  document.getElementById('t3').innerHTML='The review signal is clearest when population groups are separated: pregnant, metabolic and chronic-disease strata carry the highest observed deficiency burden.';
  document.getElementById('cap3').textContent='Weighted VDD prevalence by subgroup; dashed line marks pooled prevalence.';
@@ -172,7 +172,7 @@ document.getElementById('capRank').textContent=rkCapped?('Top+bottom '+POSTER_CA
 document.getElementById('h2gradient').textContent='The '+UNIT+' gradient';
 init('cRank',{grid:{left:120,right:60,top:10,bottom:30},xAxis:{type:'value',axisLabel:{fontSize:16}},yAxis:{type:'category',data:rk.map(function(x){return x.short;}),axisLabel:{fontSize:15}},
  series:[{type:'bar',data:rk.map(function(x){return{value:x.v,itemStyle:{color:LISA[x.lisa]}};}),barWidth:'64%',label:{show:true,position:'right',formatter:'{c}'+C.unit,fontSize:14}}]});
-if(EXTRA&&EXTRA.subgroups){var sg=EXTRA.subgroups.slice().sort(function(a,b){return a.v-b.v;}),pooled=58.3;
+if(EXTRA&&EXTRA.subgroup){var sg=EXTRA.subgroup.map(function(r){return{label:r[0],v:r[1]};}).sort(function(a,b){return a.v-b.v;}),pooled=EXTRA.subgroupPooled;
  init('cScatter',{grid:{left:190,right:58,top:18,bottom:62,containLabel:true},xAxis:{type:'value',min:0,max:100,name:'VDD prevalence (%)',nameLocation:'middle',nameGap:40,nameTextStyle:{fontSize:18},axisLabel:{fontSize:15,formatter:'{value}%'}},yAxis:{type:'category',data:sg.map(function(s){return s.label;}),axisLabel:{fontSize:14,width:180,overflow:'truncate'}},
   series:[{type:'bar',barWidth:'55%',data:sg.map(function(s){return{value:s.v,itemStyle:{color:cs(s.v/100)}};}),label:{show:true,position:'right',formatter:'{c}%',fontSize:14},markLine:{symbol:'none',silent:true,lineStyle:{color:'#d73027',type:'dashed',width:2},label:{show:false},data:[{xAxis:pooled}]}}]});
 }else if(C.hasX){var xs=R.filter(function(d){return d.x!=null;}),X=xs.map(function(d){return d.x;}),Y=xs.map(function(d){return d.v;}),n=X.length,mx=X.reduce(function(a,b){return a+b;})/n,my=Y.reduce(function(a,b){return a+b;})/n,nu=0,de=0;for(var i=0;i<n;i++){nu+=(X[i]-mx)*(Y[i]-my);de+=(X[i]-mx)*(X[i]-mx);}var b=de?nu/de:0,a0=my-b*mx,xr=rng('x');
