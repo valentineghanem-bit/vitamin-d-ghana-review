@@ -1,10 +1,15 @@
 {
+ "study_title": "Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution",
  "project": "P5",
  "repo": "vitamin-d-ghana-review",
  "date": "2026-07-15",
  "reporting": "PRISMA 2020",
  "scope": "Ghana",
+ "studies": "17",
  "N": "4318",
- "qa_badge": "QA_PENDING_FINAL_DEPLOYMENT_CONFIRMATION",
- "sync_status": "LOCAL_QA_IN_PROGRESS"
+ "pooled_vdd_prevalence": "58.3% (95% CI 47.2-69.4%)",
+ "global_morans_i": "0.307 (p=0.031)",
+ "cart_sensitivity": "58.8% LOOCV accuracy; AUC 0.36",
+ "qa_badge": "QA_PASSED_SPLUS_2026-07-15",
+ "sync_status": "LOCAL_SYNC_PASS_PENDING_RELEASE_DOI"
 }

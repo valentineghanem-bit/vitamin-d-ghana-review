@@ -1,92 +1,131 @@
-# Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis
+# Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution
 
 [![CI](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220)
 
-**Author:** Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana
-**ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
-**Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana
-**Reporting standard:** PRISMA 2020
-**Date:** 2026
-**Status:** Manuscript in preparation
+**Author:** Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
+**ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)  
+**Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
+**Reporting standard:** PRISMA 2020  
+**Date:** 2026  
+**Status:** Submission package under final QA; release pending user confirmation  
 **Pre-registration:** https://doi.org/10.17605/OSF.IO/53GBT
 
 ## 1. Abstract
-This systematic review with meta-analysis pools 17 studies (N=4,318) measuring serum 25-hydroxyvitamin D [25(OH)D] in Ghanaian populations (database inception to March 2025). Weighted pooled vitamin D deficiency (VDD; 25(OH)D <20 ng/mL) prevalence was 58.3% (95% CI 47.2-69.4%; I2=97.8%). Severe maternal VDD was associated with preeclampsia in one case-control study (aOR=5.9, 95% CI 2.14-16.40), with a second case-control study reporting a smaller adjusted association (aOR=3.31, 95% CI 1.58-6.92). Spatial analysis found positive global autocorrelation (Moran's I=0.307, p=0.031) and nominal local high-prevalence Gi* signals in Ashanti (p=0.008) and Volta (p=0.026); neither local signal survives the OSF-specified Bonferroni threshold for 16 regions. Reflexive thematic analysis identified four determinant domains (socio-cultural, dietary, healthcare-system, environmental/policy). Six of Ghana's 16 administrative regions have no published VDD data.
+This repository supports a PRISMA 2020 systematic review with meta-analysis of vitamin D status in Ghana. The final evidence set includes 17 studies and 4,318 participants. Weighted pooled vitamin D deficiency prevalence was 58.3% (95% CI 47.2-69.4%; I2=97.8%). Weighted mean serum 25-hydroxyvitamin D was 18.4 ng/mL (95% CI 15.8-21.0). Severe maternal vitamin D deficiency was associated with preeclampsia in one Ghanaian case-control study (aOR=5.9, 95% CI 2.14-16.40), with a second case-control study reporting a smaller adjusted association (aOR=3.31, 95% CI 1.58-6.92). Spatial analysis found positive global autocorrelation (Moran's I=0.307, p=0.031), while Ashanti and Volta showed nominal local Gi* signals only; neither local signal survived the Bonferroni threshold for 16 regions. Six of Ghana's 16 administrative regions had no region-specific published vitamin D deficiency data in the reviewed evidence base.
 
 ## 2. Research Question & Aims
-Estimate overall and subgroup-stratified VDD prevalence; characterise comorbidity burden and clinical associations; map geographic/spatial distribution across all 16 administrative regions; and synthesise socio-cultural and health-system determinants via reflexive thematic analysis.
+The review asks how common vitamin D deficiency is in Ghanaian populations, which clinical and contextual factors are associated with deficiency, and where the evidence is geographically concentrated or absent.
+
+The aims are to estimate pooled and subgroup-specific prevalence, summarise comorbidity associations, map regional evidence distribution, evaluate assay and study-level heterogeneity, and synthesise socio-cultural, dietary, health-system and environmental determinants.
 
 ## 3. Methods Summary
 | Method | Tool | Purpose |
 |---|---|---|
-| Random-effects meta-analysis (inverse-variance) | metafor (R) | Pooled VDD prevalence and mean 25(OH)D |
-| Meta-regression (backward elimination) | metafor (R) | Study-level predictors of prevalence |
-| Global Moran's I / Getis-Ord Gi* | PySAL-style locked output | Spatial autocorrelation and local cluster exploration |
-| CART sensitivity analysis (LOOCV) | scikit-learn | Exploratory study-level sensitivity check |
-| Reflexive thematic analysis | Braun & Clarke (2021) | Qualitative determinant synthesis |
-| Newcastle-Ottawa Scale + Cochrane RoB 2 | Manual | Risk-of-bias assessment (16 observational + 1 RCT) |
+| Random-effects meta-analysis | R, metafor | Pool VDD prevalence and mean 25(OH)D |
+| Meta-regression | R, metafor | Explore study-level predictors |
+| Assay sensitivity analysis | R, metafor | Compare primary estimate with LC-MS/MS-only studies |
+| Global Moran's I and Getis-Ord Gi* | Python locked spatial output | Explore regional spatial patterning |
+| CART sensitivity analysis | Python, scikit-learn | Test whether study-level features support prediction |
+| Reflexive thematic analysis | Braun and Clarke framework | Synthesise determinant domains |
+| NOS and RoB 2 | Manual review | Assess observational studies and the single RCT |
 
 ## 4. Data Sources
 | Source | Variables | Year | Access |
 |---|---|---|---|
-| PubMed, Scopus, Web of Science, AJOL | Study-level 25(OH)D, VDD%, N, design, region, assay | Inception-March 2025 | Public (see `data/pubmed_all_40.csv`) |
-| 17 included studies (Table 1) | Study-level extraction (`data/extracted_data.csv`) | 2014-2025 | Derived, this repository |
+| PubMed, Scopus, Web of Science and AJOL searches | Citation screening and relevance flags | Database inception to March 2025 | `data/pubmed_all_40.csv` |
+| Included Ghana studies | Study design, region, population, assay, N, 25(OH)D and VDD prevalence | 2014-2025 | `data/extracted_data.csv` |
+| Derived regional summary | Regional N, k, VDD prevalence, CI and Gi* signal status | 2026 synthesis | `data/regional_aggregation.csv` |
 
-**Data availability:** The extracted study-level dataset, PRISMA materials, analysis scripts and reproducibility materials will be archived through Zenodo at `[ZENODO DOI/URL TO BE INSERTED AFTER RELEASE: https://zenodo.org/record/XXXXXXX]` and maintained in this GitHub repository at `[GITHUB REPOSITORY URL TO BE INSERTED/CONFIRMED: https://github.com/valentineghanem-bit/vitamin-d-ghana-review]`. The Zenodo DOI will be appended here after the GitHub release triggers the linked Zenodo integration.
+**Data availability:** The extracted study-level dataset, analysis scripts, dashboard, poster and reproducibility outputs are maintained in this GitHub repository: [https://github.com/valentineghanem-bit/vitamin-d-ghana-review](https://github.com/valentineghanem-bit/vitamin-d-ghana-review). A Zenodo archive will be minted after the GitHub release through the linked Zenodo integration. Placeholder for final archive: `[ZENODO DOI/URL TO BE INSERTED AFTER RELEASE]`.
 
 ## 5. Key Findings
 | Metric | Value |
 |---|---|
-| Studies included (k) | 17 |
-| Total participants (N) | 4,318 |
+| Studies included | 17 |
+| Total participants | 4,318 |
 | Pooled VDD prevalence | 58.3% (95% CI 47.2-69.4%) |
 | Weighted mean 25(OH)D | 18.4 ng/mL (95% CI 15.8-21.0) |
-| Heterogeneity (I2) | 97.8% |
-| Sensitivity: LC-MS/MS-only | 54.1% |
-| Sensitivity: trim-and-fill adjusted | 54.7% (95% CI 46.1-63.3%) |
-| Preeclampsia association | aOR=5.9 in Fondjo 2021; aOR=3.31 in Fondjo 2024 |
+| Heterogeneity | I2=97.8%; Q=681.4, df=15 |
+| LC-MS/MS-only sensitivity estimate | 54.1% |
+| Trim-and-fill adjusted estimate | 54.7% (95% CI 46.1-63.3%) |
+| Preeclampsia association | aOR=5.9 (95% CI 2.14-16.40) and aOR=3.31 (95% CI 1.58-6.92) |
 | Global Moran's I | 0.307 (p=0.031) |
-| Local Gi* signals | Ashanti (Gi*=+2.41), Volta (Gi*=+1.97, nominal p<0.05; not Bonferroni-confirmed) |
+| Local Gi* interpretation | Ashanti and Volta were nominal local signals only; neither was Bonferroni-confirmed |
 | Meta-regression adjusted R2 | 38.7% |
-| CART exploratory performance | 58.8% LOOCV accuracy (AUC 0.36; not retained as predictive evidence) |
-| Regions with no published data | 6 of 16 |
+| CART sensitivity result | 58.8% LOOCV accuracy; AUC 0.36; not retained as predictive evidence |
+| Regions with no region-specific VDD data | 6 of 16 |
 
 ## 6. Repository Structure
-```
+```text
 vitamin-d-ghana-review/
-  README.md  CITATION.cff  LICENSE  requirements.txt
-  .github/workflows/ci.yml
-  data/            extracted_data.csv, pubmed_all_40.csv, canonical_values.csv
-  outputs/data/    cart_results.json, spatial_results.json, data_dictionary.md
-  scripts/         analysis_pipeline.py, decision_tree.py, meta_analysis.R, spatial_analysis.py
-  dashboard/       vitamin_d_ghana_dashboard.html
-  poster/          vitamin_d_ghana_poster.html
-  tests/           test_analysis.py
+|-- README.md
+|-- CITATION.cff
+|-- LICENSE
+|-- requirements.txt
+|-- .github/
+|   `-- workflows/
+|       `-- ci.yml
+|-- data/
+|   |-- canonical_values.csv
+|   |-- cart_feature_matrix.csv
+|   |-- extracted_data.csv
+|   |-- pubmed_all_40.csv
+|   `-- regional_aggregation.csv
+|-- outputs/
+|   `-- data/
+|       |-- cart_results.json
+|       |-- data_dictionary.md
+|       `-- spatial_results.json
+|-- scripts/
+|   |-- analysis_pipeline.py
+|   |-- decision_tree.py
+|   |-- meta_analysis.R
+|   `-- spatial_analysis.py
+|-- dashboard/
+|   `-- vitamin_d_ghana_dashboard.html
+|-- poster/
+|   `-- vitamin_d_ghana_poster.html
+`-- tests/
+    `-- test_analysis.py
 ```
 
 ## 7. Reproducibility
 ### 7.1 Requirements
-Python 3.12, R 4.3+. See `requirements.txt`.
+Python 3.12 and R 4.3 or later are recommended. Python dependencies are listed in `requirements.txt`.
+
 ### 7.2 Clone & install
-`git clone https://github.com/valentineghanem-bit/vitamin-d-ghana-review.git && cd vitamin-d-ghana-review && pip install -r requirements.txt`
+```bash
+git clone https://github.com/valentineghanem-bit/vitamin-d-ghana-review.git
+cd vitamin-d-ghana-review
+pip install -r requirements.txt
+```
+
 ### 7.3 Run the analytical pipeline
-`python scripts/analysis_pipeline.py --all`
+```bash
+python scripts/analysis_pipeline.py --all
+```
+
 ### 7.4 Run the test suite
-`pytest tests/`
+```bash
+python -m pytest tests -q
+```
+
 ### 7.5 Launch the interactive Dash application
-Not applicable. This project ships a static HTML dashboard, not a live Dash app.
+Not applicable. The repository now ships an offline HI-EI static HTML dashboard rather than a live Dash application.
+
 ### 7.6 Open the static HTML dashboard
-Open `dashboard/vitamin_d_ghana_dashboard.html` directly in any browser.
+Open `dashboard/vitamin_d_ghana_dashboard.html` in any modern browser. No server is required.
 
 ## 8. Outputs
 | Output | Description |
 |---|---|
-| `data/extracted_data.csv` | Canonical study-level dataset (k=17, N=4,318) |
-| `data/cart_feature_matrix.csv` | Derived CART input matrix |
+| `data/extracted_data.csv` | Canonical study-level extraction for 17 included studies |
+| `data/canonical_values.csv` | Locked headline statistics used across the submission package |
+| `data/regional_aggregation.csv` | Regional evidence summary and spatial signal interpretation |
 | `outputs/data/cart_results.json` | Reproducible CART sensitivity result |
-| `outputs/data/spatial_results.json` | Locked spatial summary |
-| `dashboard/vitamin_d_ghana_dashboard.html` | Interactive summary dashboard |
-| `poster/vitamin_d_ghana_poster.html` | A0 conference poster |
+| `outputs/data/spatial_results.json` | Reproducible spatial summary |
+| `dashboard/vitamin_d_ghana_dashboard.html` | Offline bespoke HI-EI dashboard |
+| `poster/vitamin_d_ghana_poster.html` | Offline bespoke HI-EI poster |
 
 ## 8a. Downloadable Artefacts (HTML)
 | Artefact | View on GitHub | Live preview | Direct download |
@@ -95,30 +134,35 @@ Open `dashboard/vitamin_d_ghana_dashboard.html` directly in any browser.
 | Conference poster | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/poster/vitamin_d_ghana_poster.html) |
 
 ## 9. Reporting Standard
-PRISMA 2020 (systematic review with meta-analysis). Completed checklist is maintained in the manuscript submission folder, not in the public repository.
+The manuscript is reported under PRISMA 2020 for a systematic review with meta-analysis. The OSF record documents the reclassification from the original scoping-review framing after quantitative pooling, heterogeneity assessment, meta-regression and publication-bias testing became part of the final analysis.
 
 ## 10. Ethical Statement
-Secondary synthesis of previously published, de-identified aggregate data. No new human-participant data were collected; no separate ethics approval was required. All 17 primary studies reported their own ethics approval and informed consent per the Declaration of Helsinki.
+This repository contains secondary analysis of published aggregate data. No individual participant data were collected, accessed or requested. No new ethics approval was required for this evidence synthesis. The primary studies reported their own ethics approvals and consent procedures.
 
 ## 11. Citation
 Ghanem VG (2026). Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution. OSF Registration: https://doi.org/10.17605/OSF.IO/53GBT
 
 ```bibtex
-@misc{ghanem2026vitamind,
+@misc{ghanem2026vitamindghana,
   author = {Ghanem, Valentine Golden},
-  title = {Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis},
+  title = {Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution},
   year = {2026},
-  howpublished = {OSF},
-  doi = {10.17605/OSF.IO/53GBT}
+  howpublished = {OSF and GitHub repository},
+  doi = {10.17605/OSF.IO/53GBT},
+  url = {https://github.com/valentineghanem-bit/vitamin-d-ghana-review}
 }
 ```
-See also `CITATION.cff`.
+
+See `CITATION.cff` for machine-readable citation metadata.
 
 ## 12. License
-MIT (code) | CC BY 4.0 (derived non-code outputs)
+Code is released under the MIT License. Derived non-code outputs are intended for scholarly reuse with attribution, subject to the citation requirements above.
 
 ## 13. Author & Contact
-Valentine Golden Ghanem, MSc | Ghana COCOBOD Cocoa Clinic, Accra, Ghana | valentineghanem@gmail.com | [ORCID 0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
+Valentine Golden Ghanem, MSc  
+Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
+Email: valentineghanem@gmail.com  
+ORCID: [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)
 
 ## 14. Acknowledgements
-The author thanks the authors of the 17 primary studies synthesised in this review.
+The author acknowledges the investigators of the 17 Ghanaian primary studies included in this review. Their published work made this synthesis possible.
