@@ -1,132 +1,131 @@
-"""Unit tests for the Vitamin D Ghana systematic review dataset.
-
-The tests read the canonical study-level extraction and reproducible CART output.
-They are intentionally small, but they check real files instead of checking
-hardcoded constants against themselves.
-"""
+"""Integrity tests for the corrected Vitamin D Ghana dataset."""
 import json
-import os
+from pathlib import Path
 
 import pandas as pd
 import pytest
 
+ROOT = Path(__file__).resolve().parents[1]
+DATA = ROOT / "data"
+OUT = ROOT / "outputs" / "data"
 
-POOLED_VDD_PCT = 58.3
-POOLED_VDD_CI = (47.2, 69.4)
-POOLED_MEAN_25OHD = 18.4
-POOLED_MEAN_CI = (15.8, 21.0)
-I2 = 97.8
-MORANS_I = 0.307
-MORANS_P = 0.031
-AOR_PREECLAMPSIA_VOLTA = 5.9
-AOR_VOLTA_CI = (2.14, 16.40)
-AOR_PREECLAMPSIA_ASHANTI = 3.31
-AOR_ASHANTI_CI = (1.58, 6.92)
-CART_ACCURACY = 0.588
-CART_AUC = 0.357
-N_STUDIES = 17
-TOTAL_N = 4318
-EGGER_P = 0.062
+N_PAPERS = 17
+PAPER_N = 4316
+VDD_ROWS = 9
+VDD_N = 1609
+POOLED_VDD = 55.3
+POOLED_VDD_CI = (35.5, 75.2)
+MEAN_ROWS = 7
+MEAN_N = 1153
+POOLED_MEAN = 25.1
+POOLED_MEAN_CI = (12.7, 37.5)
 
 
 @pytest.fixture
-def dat():
-    csv_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'extracted_data.csv')
-    if not os.path.exists(csv_path):
-        pytest.skip("extracted_data.csv not found")
-    return pd.read_csv(csv_path)
+def extracted():
+    return pd.read_csv(DATA / "extracted_data.csv")
 
 
-class TestDataIntegrity:
-    """Structural checks against the canonical study-level dataset."""
-
-    def test_row_count(self, dat):
-        assert len(dat) == N_STUDIES
-
-    def test_required_columns_present(self, dat):
-        required = [
-            'ref_id', 'first_author_year', 'region', 'design', 'population',
-            'n', 'mean_25ohd_ngml', 'sd_25ohd', 'vdd_prevalence_pct',
-            'assay_method', 'quality_assessment',
-        ]
-        for col in required:
-            assert col in dat.columns, f"Missing required column: {col}"
-
-    def test_n_values_positive(self, dat):
-        assert (dat['n'] > 0).all()
-
-    def test_total_n_matches_locked_value(self, dat):
-        assert dat['n'].sum() == TOTAL_N
-
-    def test_ref_ids_sequential_no_duplicates(self, dat):
-        assert dat['ref_id'].nunique() == len(dat)
-        assert sorted(dat['ref_id'].tolist()) == list(range(1, N_STUDIES + 1))
-
-    def test_vdd_prevalence_bounded(self, dat):
-        vdd = dat['vdd_prevalence_pct'].dropna()
-        assert (vdd >= 0).all() and (vdd <= 100).all()
-
-    def test_mean_25ohd_in_plausible_range(self, dat):
-        means = dat['mean_25ohd_ngml'].dropna()
-        assert (means >= 5).all() and (means <= 50).all()
-
-    def test_assay_method_valid(self, dat):
-        assert set(dat['assay_method'].unique()).issubset({'ELISA', 'LC-MS/MS'})
-
-    def test_rct_present_and_flagged(self, dat):
-        rcts = dat[dat['design'] == 'RCT']
-        assert len(rcts) == 1
-        assert rcts.iloc[0]['ref_id'] == 17
+@pytest.fixture
+def canonical():
+    return pd.read_csv(DATA / "canonical_values.csv").iloc[0]
 
 
-class TestCanonicalValueInternalConsistency:
-    """Sanity checks on locked summary statistics and reproducible model output."""
-
-    def test_pooled_vdd_within_own_ci(self):
-        lo, hi = POOLED_VDD_CI
-        assert lo <= POOLED_VDD_PCT <= hi
-
-    def test_pooled_mean_within_own_ci(self):
-        lo, hi = POOLED_MEAN_CI
-        assert lo <= POOLED_MEAN_25OHD <= hi
-
-    def test_preeclampsia_aors_within_own_cis(self):
-        lo, hi = AOR_VOLTA_CI
-        assert lo <= AOR_PREECLAMPSIA_VOLTA <= hi
-        lo, hi = AOR_ASHANTI_CI
-        assert lo <= AOR_PREECLAMPSIA_ASHANTI <= hi
-
-    def test_heterogeneity_substantial(self):
-        assert I2 > 75.0
-
-    def test_morans_i_range_and_significant(self):
-        assert -1 <= MORANS_I <= 1
-        assert MORANS_P < 0.05
-
-    def test_cart_is_negative_sensitivity_check(self):
-        assert CART_ACCURACY < 0.70
-        assert CART_AUC < 0.50
-
-    def test_cart_results_file_matches_locked_values(self):
-        path = os.path.join(os.path.dirname(__file__), '..', 'outputs', 'data', 'cart_results.json')
-        assert os.path.exists(path), "cart_results.json not found; run scripts/decision_tree.py"
-        with open(path, encoding='utf-8') as f:
-            result = json.load(f)
-        assert result['n_studies'] == N_STUDIES
-        assert result['accuracy'] == CART_ACCURACY
-        assert result['auc'] == CART_AUC
-        assert result['source'] == 'data/cart_feature_matrix.csv derived from data/extracted_data.csv'
-
-    def test_cart_feature_matrix_exists_and_matches_studies(self):
-        path = os.path.join(os.path.dirname(__file__), '..', 'data', 'cart_feature_matrix.csv')
-        assert os.path.exists(path), "cart_feature_matrix.csv not found; run scripts/decision_tree.py"
-        matrix = pd.read_csv(path)
-        assert len(matrix) == N_STUDIES
-        assert sorted(matrix['ref_id'].tolist()) == list(range(1, N_STUDIES + 1))
-
-    def test_egger_borderline_not_definitive(self):
-        assert EGGER_P > 0.05
+def row(df, study):
+    match = df[df["first_author_year"] == study]
+    assert len(match) == 1, f"{study} row missing or duplicated"
+    return match.iloc[0]
 
 
-if __name__ == '__main__':
-    pytest.main([__file__, '-v', '--tb=short'])
+class TestCorrectedExtraction:
+    def test_review_count_and_paper_n(self, extracted):
+        assert len(extracted) == N_PAPERS
+        assert int(extracted["paper_n"].sum()) == PAPER_N
+
+    def test_required_corrected_columns_present(self, extracted):
+        required = {
+            "paper_n",
+            "analysis_n_vdd",
+            "analysis_n_mean",
+            "mean_statistic_type",
+            "cohort_id",
+            "analysis_role",
+            "extraction_status",
+            "extraction_note",
+        }
+        assert required.issubset(extracted.columns)
+
+    def test_vdd_analysis_uses_only_verified_rows(self, extracted):
+        vdd = extracted.dropna(subset=["analysis_n_vdd", "vdd_prevalence_pct"])
+        assert len(vdd) == VDD_ROWS
+        assert int(vdd["analysis_n_vdd"].sum()) == VDD_N
+        assert vdd["extraction_status"].str.contains("extractable").all()
+
+    def test_unsupported_old_vdd_values_are_removed(self, extracted):
+        assert pd.isna(row(extracted, "Asare 2017")["vdd_prevalence_pct"])
+        assert pd.isna(row(extracted, "Sakyi 2022")["vdd_prevalence_pct"])
+        assert pd.isna(row(extracted, "Dzudzor 2023")["vdd_prevalence_pct"])
+
+    def test_pooling_rows_match_eligibility_decisions(self, extracted):
+        fondjo2017 = row(extracted, "Fondjo 2017")
+        assert int(fondjo2017["paper_n"]) == 216
+        assert int(fondjo2017["analysis_n_vdd"]) == 118
+        assert fondjo2017["vdd_prevalence_pct"] == pytest.approx(92.4)
+        assert pd.isna(fondjo2017["mean_25ohd_ngml"])
+
+        fondjo2018 = row(extracted, "Fondjo 2018")
+        assert fondjo2018["vdd_prevalence_pct"] == pytest.approx(60.9)
+        assert fondjo2018["mean_25ohd_ngml"] == pytest.approx(8.38)
+
+        fondjo2022 = row(extracted, "Fondjo 2022")
+        assert fondjo2022["vdd_prevalence_pct"] == pytest.approx(39.5)
+        assert pd.isna(fondjo2022["mean_25ohd_ngml"])
+        assert "median/IQR" in fondjo2022["mean_statistic_type"]
+
+    def test_mean_analysis_does_not_count_median_rows_as_means(self, extracted):
+        mean = extracted.dropna(subset=["analysis_n_mean", "mean_25ohd_ngml"])
+        assert len(mean) == MEAN_ROWS
+        assert int(mean["analysis_n_mean"].sum()) == MEAN_N
+        assert "Fondjo 2022" not in set(mean["first_author_year"])
+        assert "Dzudzor 2023" not in set(mean["first_author_year"])
+
+
+class TestCanonicalOutputs:
+    def test_canonical_values_match_corrected_meta_analysis(self, canonical):
+        assert int(canonical["Included papers (k)"]) == N_PAPERS
+        assert int(canonical["Prevalence analytic rows (k)"]) == VDD_ROWS
+        assert int(canonical["Prevalence analytic N"]) == VDD_N
+        assert canonical["Random-effects VDD prevalence (%)"] == pytest.approx(POOLED_VDD)
+        assert canonical["VDD 95% CI low"] == pytest.approx(POOLED_VDD_CI[0])
+        assert canonical["VDD 95% CI high"] == pytest.approx(POOLED_VDD_CI[1])
+        assert canonical["Random-effects mean 25(OH)D (ng/mL)"] == pytest.approx(POOLED_MEAN)
+        assert canonical["Mean 25(OH)D 95% CI low"] == pytest.approx(POOLED_MEAN_CI[0])
+        assert canonical["Mean 25(OH)D 95% CI high"] == pytest.approx(POOLED_MEAN_CI[1])
+
+    def test_spatial_inference_is_withdrawn(self, canonical):
+        assert int(canonical["Region-specific VDD mapped regions (k)"]) == 4
+        assert int(canonical["Regions without region-specific VDD prevalence data"]) == 12
+        assert canonical["Spatial autocorrelation retained"] == "No"
+
+    def test_regional_aggregation_has_four_mapped_regions(self):
+        regional = pd.read_csv(DATA / "regional_aggregation.csv")
+        mapped = regional[regional["k"] > 0]
+        assert set(mapped["region"]) == {"Ashanti", "Volta", "Eastern", "Western North"}
+        assert len(regional[regional["k"] == 0]) == 12
+
+    def test_cart_feature_matrix_is_verification_matrix_only(self):
+        matrix = pd.read_csv(DATA / "cart_feature_matrix.csv")
+        assert len(matrix) == VDD_ROWS
+        assert set(matrix["ref_id"]) == {4, 5, 21, 23, 24, 26, 27, 28, 31}
+
+    def test_withdrawn_model_json_outputs_are_not_inferential(self):
+        with open(OUT / "cart_results.json", encoding="utf-8") as f:
+            cart = json.load(f)
+        assert cart["retained_as_inferential_model"] is False
+        assert cart["n_rows"] == VDD_ROWS
+
+        with open(OUT / "spatial_results.json", encoding="utf-8") as f:
+            spatial = json.load(f)
+        assert spatial["formal_spatial_autocorrelation_retained"] is False
+        assert spatial["mapped_regions"] == 4
+        assert spatial["regions_without_region_specific_prevalence_data"] == 12

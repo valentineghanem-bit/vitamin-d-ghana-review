@@ -1,13 +1,17 @@
-region,k,n,vdd_prevalence_pct,ci_low,ci_high,gi_star_z,p_value,classification
-Ashanti,9,2605,65.0,52.1,77.9,2.41,0.008,Nominal high cluster; not Bonferroni-confirmed
-Volta,1,180,81.7,75.6,87.8,1.97,0.026,Nominal high cluster; single-study
-Greater Accra,2,140,55.4,39.1,71.7,0.84,0.18,Neutral
-Eastern,2,193,7.7,2.1,13.3,-0.76,0.21,Neutral
-Western North,1,200,28.0,21.7,34.3,-0.61,0.28,Neutral
-Multi-region,2,1000,43.6,38.8,48.4,0.19,0.67,Neutral
-Ahafo,0,0,,,,,,No published data
-Bono East,0,0,,,,,,No published data
-Central,0,0,,,,,,No published data
-North East,0,0,,,,,,No published data
-Oti,0,0,,,,,,No published data
-Savannah,0,0,,,,,,No published data
+region,k,n,vdd_events,vdd_prevalence_pct,ci_low,ci_high,classification,note
+Ahafo,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Ashanti,5,734,477,65.0,61.5,68.4,Region-specific prevalence data available,Administrative-region estimate from the final extraction file.
+Bono,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Bono East,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Central,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Eastern,1,95,8,8.4,2.8,14.0,Region-specific prevalence data available,Administrative-region estimate from the final extraction file.
+Greater Accra,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+North East,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Northern,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Oti,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Savannah,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Upper East,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Upper West,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Volta,1,180,147,81.7,76.0,87.3,Region-specific prevalence data available,Administrative-region estimate from the final extraction file.
+Western,0,0,,,,,No region-specific VDD prevalence data,Multi-region/sector studies were not assigned to this administrative region.
+Western North,1,100,28,28.0,19.2,36.8,Region-specific prevalence data available,Administrative-region estimate from the final extraction file.

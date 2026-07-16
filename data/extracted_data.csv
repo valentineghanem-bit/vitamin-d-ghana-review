@@ -1,18 +1,18 @@
-ref_id,first_author_year,region,design,population,n,mean_25ohd_ngml,sd_25ohd,vdd_prevalence_pct,assay_method,quality_assessment
-1,Durazo-Arvizu 2014,Ashanti,Cross-sectional,Healthy adults,500,30.4,6.9,4.8,LC-MS/MS,9 - High (NOS)
-2,Kramer 2016,Ashanti,Cross-sectional,Healthy adults,490,30.4,6.9,5.0,LC-MS/MS,8 - High (NOS)
-3,Chiang 2017,Ashanti,Cross-sectional,Healthy adults,479,30.1,6.8,5.5,LC-MS/MS,9 - High (NOS)
-4,Fondjo 2017,Ashanti,Case-control,T2DM,218,6.8,3.1,92.4,ELISA,8 - High (NOS)
-5,Fondjo 2021,Volta,Case-control,Pregnant women,180,14.3,6.9,81.7,ELISA,9 - High (NOS)
-6,Asare 2017,Greater Accra,Observational,BPH patients,60,18.5,4.5,48.3,ELISA,4 - Moderate (NOS)
-7,Sakyi 2021,Multi-region,Cross-sectional,Healthy donors,500,25.1,5.8,43.6,ELISA,9 - High (NOS)
-8,Antwi 2024,Multi-region,Cross-sectional,Healthy donors,500,25.1,5.8,43.6,ELISA,9 - High (NOS)
-9,Fondjo 2018,Ashanti,Cross-sectional,T2DM women,192,21.0,4.5,60.9,ELISA,8 - High (NOS)
-10,Arhin-Aidoo 2025,Western North,Case-control,T2DM,200,32.4,3.5,28.0,ELISA,9 - High (NOS)
-11,Gernand 2019,Eastern,Cross-sectional,Pre-conception,98,26.0,5.7,5.1,LC-MS/MS,6 - Moderate (NOS)
-12,Pobee 2020,Eastern,Cross-sectional,Pre-conception,95,27.1,0.9,10.3,LC-MS/MS,6 - Moderate (NOS)
-13,Fondjo 2024,Ashanti,Case-control,Pregnant women,162,19.4,4.9,54.7,ELISA,8 - High (NOS)
-14,Fondjo 2022,Ashanti,Cross-sectional,Psychiatric,300,24.1,12.7,39.5,ELISA,8 - High (NOS)
-15,Sakyi 2022,Ashanti,Case-control,RA patients,138,17.5,4.2,58.5,ELISA,8 - High (NOS)
-16,Dzudzor 2023,Greater Accra,Case-control,CLD patients,80,15.7,3.8,62.5,ELISA,7 - High (NOS)
-17,Ayamah 2025,Ashanti,RCT,Pregnant (1st trimester),126,,,88.1,ELISA,Some concerns (RoB2)
+ref_id,first_author_year,region,design,population,paper_n,analysis_n_vdd,analysis_n_mean,mean_25ohd_ngml,sd_25ohd,mean_statistic_type,vdd_prevalence_pct,vdd_events,assay_method,quality_assessment,cohort_id,analysis_role,extraction_status,extraction_note
+1,Durazo-Arvizu 2014,Ashanti,Cross-sectional,Healthy adults,500,,,,,NR,,,LC-MS/MS,9 - High (NOS),VIDA_Ghana_Ashanti,context_only,not_extractable_for_pooling,African-origin latitude paper; Ghana values overlap with the VIDA/METS cohort also analysed by Kramer and Chiang. Not counted as an independent prevalence row.
+2,Kramer 2016,Ashanti,Cross-sectional,Healthy adults,490,,490,30.28,6.7,sex-weighted mean/SD from Ghana table,,,LC-MS/MS,8 - High (NOS),VIDA_Ghana_Ashanti,mean_only,extractable_mean,Ghana table reports 203 men and 287 women; sex-weighted 25(OH)D mean approximately 30.28 ng/mL. VDD prevalence was not reported.
+3,Chiang 2017,Ashanti,Cross-sectional,Healthy adults,479,,,,,NR,,,LC-MS/MS,9 - High (NOS),VIDA_Ghana_Ashanti,context_only,overlapping_cohort,"Blood-pressure analysis of the same African-origin Ghana cohort; retained narratively, not counted as an independent vitamin D prevalence row."
+4,Fondjo 2017,Ashanti,Case-control,T2DM cases,216,118,,,,median/IQR only,92.4,109,ELISA,8 - High (NOS),Fondjo2017_T2DM,vdd_only,extractable_prevalence,"Article tables report 118 T2DM cases and 98 controls; T2DM VDD is 109/118. 25(OH)D is median 2.45 (1.93-8.96) ng/mL, not mean/SD."
+5,Fondjo 2021,Volta,Case-control,Pregnant women,180,180,,,,NR,81.7,147,ELISA,9 - High (NOS),Fondjo2021_pregnancy,vdd_only,extractable_prevalence,"BMC Pregnancy Childbirth reports overall VDD 81.7%, with 88.6% in PE and 75.0% in normotensive pregnant women."
+20,Asare 2017,Greater Accra,Observational,BPH patients,60,,30,28.55,8.7,BPH before-treatment mean/SD,,,ELISA,4 - Moderate (NOS),Asare2017_BPH,mean_only,extractable_mean,Article table reports vitamin D 28.55 +/- 8.70 ng/mL before BPH treatment; no VDD prevalence is reported.
+21,Sakyi 2021,Multi-region,Cross-sectional,Healthy blood donors,500,500,,,,NR,43.6,218,ELISA,9 - High (NOS),Sakyi2021_donors,vdd_only,extractable_prevalence,"Article reports 218/500 VDD across northern, middle-belt and southern sectors. No usable mean/SD was available."
+22,Antwi 2024,Multi-region,Cross-sectional,Healthy population/cytokines,500,,,,,NR,,,ELISA,9 - High (NOS),Sakyi2021_donors,context_only,probable_overlapping_cohort,Likely reuses the same healthy Ghanaian donor frame as Sakyi 2021; retained for cytokine context only unless sample independence is proven.
+23,Fondjo 2018,Ashanti,Cross-sectional,T2DM women,192,192,192,8.38,2.43,converted mean/SD from nmol/L,60.9,117,ELISA,8 - High (NOS),Fondjo2018_T2DM_women,vdd_and_mean,extractable_prevalence_and_mean,Article reports 25(OH)D in nmol/L: 22.08 +/- 5.98 premenopausal and 19.73 +/- 6.05 postmenopausal; converted using 2.496 nmol/L per ng/mL. VDD is 60.9%.
+24,Arhin-Aidoo 2025,Western North,Case-control,T2DM cases,200,100,100,31.25,3.55,case mean/SD,28.0,28,ELISA,9 - High (NOS),ArhinAidoo2025_T2DM,vdd_and_mean,extractable_prevalence_and_mean,"Scientific Reports table reports T2DM cases n=100, vitamin D 31.25 +/- 3.55 and deficiency 28.0%."
+25,Gernand 2019,Eastern,Cross-sectional,Pre-conception women,98,,98,27.24,6.01,converted total 25(OH)D mean/SD,,,LC-MS/MS,6 - Moderate (NOS),Gernand2019_preconception,mean_only,extractable_mean,Article reports total 25(OH)D 68.0 +/- 15.0 nmol/L; converted to ng/mL. No compatible VDD prevalence was available.
+26,Pobee 2020,Eastern,Cross-sectional,Pre-conception women,95,95,95,27.25,,group-weighted total 25(OH)D mean,8.4,8,LC-MS/MS,6 - Moderate (NOS),Pobee2020_preconception,vdd_and_mean_descriptive,extractable_prevalence_and_descriptive_mean,Article reports total 25(OH)D + C3 epimer <50 nmol/L in 8/95 women and adjusted group means around 68 nmol/L. SD for the overall total mean is not directly reported.
+27,Fondjo 2024,Ashanti,Case-control,Pregnant women with vitamin D data,162,148,148,19.87,,group-weighted mean,54.7,81,ELISA,8 - High (NOS),Fondjo2024_pregnancy,vdd_and_mean_descriptive,extractable_prevalence_and_descriptive_mean,Vitamin D analytic table reports 93 normotensive and 55 PE participants; VDD 81/148 and aOR 3.311. Enrolled N=162 is not the vitamin D denominator.
+28,Fondjo 2022,Ashanti,Cross-sectional,Psychiatric patients on treatment,300,150,,,,median/IQR only,39.5,59,ELISA,8 - High (NOS),Fondjo2022_psychiatric,vdd_only,extractable_prevalence,"Article reports treatment-active VDD prevalence 39.5%; vitamin D is median/IQR by treatment group, not mean/SD."
+29,Sakyi 2022,Ashanti,Case-control,RA patients,138,,,,,printed unit pg/mL; not pooled,,,ELISA,8 - High (NOS),Sakyi2022_RA,context_only,not_extractable_for_pooling,Article reports RA 25VD 17.48 +/- 4.84 with printed unit pg/mL and no VDD prevalence; this row is not pooled.
+30,Dzudzor 2023,Greater Accra,Case-control,CLD patients,80,,,,,median/IQR only,,,ELISA,7 - High (NOS),Dzudzor2023_CLD,context_only,not_extractable_for_pooling,"Article reports CLD n=40 and controls n=40; CLD 25-OH vitamin D median 62.4 ng/mL, not a mean/SD row, and no VDD prevalence."
+31,Ayamah 2025,Ashanti,RCT,Pregnant women baseline,126,126,,,,NR baseline mean,88.1,111,ELISA,Some concerns (RoB2),Ayamah2025_RCT,vdd_only,extractable_prevalence,Scientific Reports reports baseline VDD 88.1% and end-line fortified vs control VDD 75.5% vs 93.0%; no baseline mean/SD reported.

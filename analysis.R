@@ -1,5 +1,4 @@
-# analysis.R - Vitamin D Ghana systematic review with meta-analysis.
-# Repository-level analysis wrapper. Reads only the canonical extracted dataset.
+# analysis.R - corrected Vitamin D Ghana review wrapper.
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -13,54 +12,47 @@ if (!file.exists(csv_path)) {
 
 dat <- read_csv(csv_path, show_col_types = FALSE)
 required <- c(
-  "ref_id", "first_author_year", "region", "design", "population", "n",
-  "mean_25ohd_ngml", "sd_25ohd", "vdd_prevalence_pct", "assay_method",
-  "quality_assessment"
+  "ref_id", "first_author_year", "region", "design", "population", "paper_n",
+  "analysis_n_vdd", "analysis_n_mean", "mean_25ohd_ngml", "sd_25ohd",
+  "vdd_prevalence_pct", "vdd_events", "assay_method", "quality_assessment",
+  "analysis_role", "extraction_status"
 )
 missing <- setdiff(required, names(dat))
 if (length(missing) > 0) {
   stop(sprintf("Missing required columns: %s", paste(missing, collapse = ", ")))
 }
 
-cat(sprintf("Loaded %d studies; total N = %s\n",
-            nrow(dat), format(sum(dat$n), big.mark = ",")))
+paper_n <- sum(dat$paper_n, na.rm = TRUE)
+prev <- dat |> filter(!is.na(analysis_n_vdd), !is.na(vdd_prevalence_pct))
+mean_rows <- dat |> filter(!is.na(analysis_n_mean), !is.na(mean_25ohd_ngml))
 
-if (nrow(dat) != 17 || sum(dat$n) != 4318) {
-  stop("Dataset integrity check failed: expected k=17 and N=4,318.")
+cat(sprintf("Eligible papers: %d; review-level paper N = %s\n",
+            nrow(dat), format(paper_n, big.mark = ",")))
+cat(sprintf("Eligible VDD rows: %d; analytic N = %s\n",
+            nrow(prev), format(sum(prev$analysis_n_vdd), big.mark = ",")))
+cat(sprintf("Descriptive mean 25(OH)D rows: %d; analytic N = %s\n\n",
+            nrow(mean_rows), format(sum(mean_rows$analysis_n_mean), big.mark = ",")))
+
+if (nrow(dat) != 17 || paper_n != 4316 || nrow(prev) != 9 || sum(prev$analysis_n_vdd) != 1609) {
+  stop("Dataset integrity check failed against corrected extraction values.")
 }
 
-subgroup <- dat |>
-  filter(!is.na(vdd_prevalence_pct)) |>
+subgroup <- prev |>
   group_by(population) |>
   summarise(
     k = n(),
-    n = sum(n),
-    weighted_vdd_pct = round(weighted.mean(vdd_prevalence_pct, n), 1),
-    weighted_mean_25ohd = round(weighted.mean(mean_25ohd_ngml, n, na.rm = TRUE), 1),
+    analytic_n = sum(analysis_n_vdd),
+    events = sum(vdd_events),
+    event_weighted_vdd_pct = round(events / analytic_n * 100, 1),
     .groups = "drop"
   ) |>
-  arrange(desc(weighted_vdd_pct))
+  arrange(desc(event_weighted_vdd_pct))
 
-cat("\nVDD prevalence by population subgroup\n")
+cat("VDD prevalence by verified population row\n")
 print(subgroup)
 
-by_region <- dat |>
-  group_by(region) |>
-  summarise(
-    k = n(),
-    n = sum(n),
-    weighted_vdd_pct = round(weighted.mean(vdd_prevalence_pct, n, na.rm = TRUE), 1),
-    weighted_mean_25ohd = round(weighted.mean(mean_25ohd_ngml, n, na.rm = TRUE), 1),
-    .groups = "drop"
-  ) |>
-  arrange(desc(weighted_vdd_pct))
+regional <- read_csv("data/regional_aggregation.csv", show_col_types = FALSE)
+cat("\nRegional evidence coverage\n")
+print(regional |> select(region, k, n, vdd_prevalence_pct, classification))
 
-cat("\nRegional evidence summary\n")
-print(by_region)
-
-cat("\nUnit conversion check\n")
-cat("Formula: ng/mL = nmol/L / 2.496\n")
-cat("VDD threshold: <20 ng/mL (<50 nmol/L)\n")
-cat("Insufficiency: 20-29 ng/mL (50-72 nmol/L)\n")
-cat("Sufficiency: >=30 ng/mL (>=75 nmol/L)\n")
-cat("\nAnalysis wrapper complete. Use scripts/meta_analysis.R for the primary meta-analysis.\n")
+cat("\nSpatial autocorrelation and CART prediction claims are withdrawn in the corrected package.\n")
