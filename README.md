@@ -134,7 +134,7 @@ Open `dashboard/vitamin_d_ghana_dashboard.html` in any modern browser. No server
 | Conference poster | [View](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Preview](https://htmlpreview.github.io/?https://github.com/valentineghanem-bit/vitamin-d-ghana-review/blob/main/poster/vitamin_d_ghana_poster.html) | [Download](https://raw.githubusercontent.com/valentineghanem-bit/vitamin-d-ghana-review/main/poster/vitamin_d_ghana_poster.html) |
 
 ## 9. Reporting Standard
-The manuscript is reported under PRISMA 2020 for a systematic review with meta-analysis. The OSF record documents the reclassification from the original scoping-review framing after quantitative pooling, heterogeneity assessment, meta-regression and publication-bias testing became part of the final analysis.
+The manuscript is reported under PRISMA 2020 for a systematic review with meta-analysis. The OSF record, manuscript, repository and release archive now use the same study descriptor, sample size and data-availability citation.
 
 ## 10. Ethical Statement
 This repository contains secondary analysis of published aggregate data. No individual participant data were collected, accessed or requested. No new ethics approval was required for this evidence synthesis. The primary studies reported their own ethics approvals and consent procedures.
