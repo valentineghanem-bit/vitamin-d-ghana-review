@@ -7,11 +7,11 @@ authors:
     given-names: "Valentine Golden"
     orcid: "https://orcid.org/0009-0002-8332-0220"
     affiliation: "Ghana COCOBOD Cocoa Clinic, Accra, Ghana"
-version: "1.0.4"
+version: "1.1.0"
 date-released: "2026-07-16"
 url: "https://github.com/valentineghanem-bit/vitamin-d-ghana-review"
 repository-code: "https://github.com/valentineghanem-bit/vitamin-d-ghana-review"
-doi: "10.5281/zenodo.21393008"
+doi: "10.5281/zenodo.21400878"
 license: MIT
 keywords:
   - "vitamin D deficiency"

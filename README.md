@@ -1,13 +1,13 @@
 # Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps
 
-[![CI](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21393008.svg)](https://doi.org/10.5281/zenodo.21393008)
+[![CI](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21400878.svg)](https://doi.org/10.5281/zenodo.21400878)
 
 **Author:** Valentine Golden Ghanem  
 **Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
 **ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)  
 **Reporting standard:** PRISMA 2020  
 **OSF registration:** https://doi.org/10.17605/OSF.IO/53GBT  
-**Release:** v1.0.4
+**Release:** v1.1.0
 
 ## 1. What This Repository Contains
 This repository supports a PRISMA 2020 systematic review with meta-analysis of vitamin D status in Ghana. The review includes 17 eligible peer-reviewed studies. VDD prevalence could be extracted from 9 independent analytic rows comprising 1,609 participants. Seven rows comprising 1,153 participants contributed descriptive mean 25(OH)D data.
@@ -88,17 +88,18 @@ The dashboard and poster are offline HI-EI HTML artifacts. Open them directly in
 The extraction dataset, scripts, dashboard, poster and reproducibility outputs are maintained in this GitHub repository and permanently archived on Zenodo:
 
 - GitHub: [https://github.com/valentineghanem-bit/vitamin-d-ghana-review](https://github.com/valentineghanem-bit/vitamin-d-ghana-review)
-- Zenodo: [https://doi.org/10.5281/zenodo.21393008](https://doi.org/10.5281/zenodo.21393008)
+- Zenodo (version of record, v1.1.0): [https://doi.org/10.5281/zenodo.21400878](https://doi.org/10.5281/zenodo.21400878)
+- Zenodo (concept DOI, always resolves to the latest version): [https://doi.org/10.5281/zenodo.21383063](https://doi.org/10.5281/zenodo.21383063)
 
 ## 7. Citation
-Ghanem VG (2026). Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps. OSF registration: https://doi.org/10.17605/OSF.IO/53GBT. Zenodo: https://doi.org/10.5281/zenodo.21393008.
+Ghanem VG (2026). Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps. OSF registration: https://doi.org/10.17605/OSF.IO/53GBT. Zenodo: https://doi.org/10.5281/zenodo.21400878.
 
 ```bibtex
 @misc{ghanem2026vitamindghana,
   author = {Ghanem, Valentine Golden},
   title = {Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps},
   year = {2026},
-  doi = {10.5281/zenodo.21393008},
+  doi = {10.5281/zenodo.21400878},
   url = {https://github.com/valentineghanem-bit/vitamin-d-ghana-review}
 }
 ```
