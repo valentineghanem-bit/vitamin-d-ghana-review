@@ -1,13 +1,13 @@
 # Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution
 
-[![CI](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21383897.svg)](https://doi.org/10.5281/zenodo.21383897)
+[![CI](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml/badge.svg)](https://github.com/valentineghanem-bit/vitamin-d-ghana-review/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python 3.12](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/) [![R 4.3+](https://img.shields.io/badge/R-4.3+-blue.svg)](https://www.r-project.org/) [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--8332--0220-green.svg)](https://orcid.org/0009-0002-8332-0220) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21393008.svg)](https://doi.org/10.5281/zenodo.21393008)
 
 **Author:** Valentine Golden Ghanem | Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
 **ORCID:** [0009-0002-8332-0220](https://orcid.org/0009-0002-8332-0220)  
 **Affiliation:** Ghana COCOBOD Cocoa Clinic, Accra, Ghana  
 **Reporting standard:** PRISMA 2020  
 **Date:** 2026  
-**Status:** Manuscript under review; code/data release v1.0.0 published  
+**Status:** Manuscript under review; code/data release v1.0.4 published  
 **Pre-registration:** https://doi.org/10.17605/OSF.IO/53GBT
 
 ## 1. Abstract
@@ -36,7 +36,7 @@ The aims are to estimate pooled and subgroup-specific prevalence, summarise como
 | Included Ghana studies | Study design, region, population, assay, N, 25(OH)D and VDD prevalence | 2014-2025 | `data/extracted_data.csv` |
 | Derived regional summary | Regional N, k, VDD prevalence, CI and Gi* signal status | 2026 synthesis | `data/regional_aggregation.csv` |
 
-**Data availability:** The extracted study-level dataset, analysis scripts, dashboard, poster and reproducibility outputs are maintained in this GitHub repository: [https://github.com/valentineghanem-bit/vitamin-d-ghana-review](https://github.com/valentineghanem-bit/vitamin-d-ghana-review). Release v1.0.2 is permanently archived on Zenodo: [https://doi.org/10.5281/zenodo.21383897](https://doi.org/10.5281/zenodo.21383897).
+**Data availability:** The extracted study-level dataset, analysis scripts, dashboard, poster and reproducibility outputs are maintained in this GitHub repository: [https://github.com/valentineghanem-bit/vitamin-d-ghana-review](https://github.com/valentineghanem-bit/vitamin-d-ghana-review). The corrected release v1.0.4 is permanently archived on Zenodo: [https://doi.org/10.5281/zenodo.21393008](https://doi.org/10.5281/zenodo.21393008).
 
 ## 5. Key Findings
 | Metric | Value |
