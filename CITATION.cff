@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software or dataset, please cite both the repository release and the manuscript."
-title: "Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution - Analysis Code and Data"
+title: "Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps - Analysis Code and Data"
 type: dataset
 authors:
   - family-names: "Ghanem"
@@ -26,6 +26,6 @@ preferred-citation:
     - family-names: "Ghanem"
       given-names: "Valentine Golden"
       orcid: "https://orcid.org/0009-0002-8332-0220"
-  title: "Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Determinants, Comorbidity Burden, and Spatial Distribution"
+  title: "Vitamin D Status in Ghana: A Systematic Review with Meta-Analysis of Prevalence, Comorbidity Signals, and Evidence Gaps"
   journal: "Public Health Nutrition"
   year: 2026
